@@ -66,15 +66,8 @@
     section + section { border-top: 1px solid #203245; }
     .section-intro { max-width: 72ch; margin-bottom: 2rem; }
     .section-intro p { margin-bottom: 0; }
-    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; counter-reset: stage; }
-    .flow-card { position: relative; min-height: 230px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 1.4rem; }
-    .flow-card:not(:last-child)::after { position: absolute; top: 45%; right: -.64rem; z-index: 2; width: 1.25rem; height: 1.25rem; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); background: var(--surface); content: ""; transform: rotate(45deg); }
-    .flow-card:nth-child(2) { border-color: #486578; }
-    .flow-card:nth-child(3) { border-color: #437885; background: #122735; }
-    .flow-card:nth-child(4) { border-color: #5f6559; }
-    .flow-card .number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: 1.15rem; border-radius: 50%; background: #204653; color: var(--cyan); font-size: .82rem; font-weight: 900; }
-    .flow-card h3 { font-size: 1.18rem; }
-    .flow-card p { margin-bottom: 0; font-size: .91rem; }
+    .cycle-figure { margin: 0 0 1.2rem; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .cycle-figure img { display: block; width: 100%; min-width: 900px; height: auto; }
     .subflow { display: grid; grid-template-columns: minmax(150px, .27fr) 1fr; gap: 1.25rem; margin-top: 1.2rem; border: 1px solid #536b6d; border-radius: var(--radius); background: #12232c; padding: 1.2rem 1.4rem; }
     .subflow h3 { margin-bottom: 0; color: var(--gold); }
     .subflow p { margin-bottom: .5rem; font-size: .92rem; }
@@ -111,8 +104,6 @@
     @media (max-width: 850px) {
       .hero, .journey, .subflow { grid-template-columns: 1fr; }
       .hero { padding-top: 3rem; }
-      .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .flow-card:nth-child(2)::after { display: none; }
       .flow-caption { text-align: left; }
     }
     @media (max-width: 560px) {
@@ -120,10 +111,7 @@
       .topbar { align-items: flex-start; flex-direction: column; }
       .topbar nav { gap: .8rem; }
       .topbar nav .language-link { padding-left: .8rem; }
-      .flow, .mini-grid { grid-template-columns: 1fr; }
-      .flow-card { min-height: 0; }
-      .flow-card:not(:last-child)::after { top: auto; right: calc(50% - .62rem); bottom: -.64rem; transform: rotate(135deg); }
-      .flow-card:nth-child(2)::after { display: block; }
+      .mini-grid { grid-template-columns: 1fr; }
       .process { padding-right: 1rem; padding-left: 3.65rem; }
       .process li::before { left: -2.6rem; }
     }
@@ -170,30 +158,11 @@
       <div class="section-intro">
         <p class="eyebrow">Overview</p>
         <h2 id="cycle-title">From initial requirement to finished product</h2>
-        <p>The initial product specification comes first. People can divide the work into lots or prepare that breakdown with an LLM. Each recognized lot then has its own objective and conditions for closure.</p>
+        <p>Product specification and lot planning prepare the project. People can divide the work into lots or prepare that breakdown with an LLM. Each lot then follows the same cycle, from its start through closure.</p>
       </div>
-      <div class="flow" role="img" aria-label="Cycle: initial product specification, division into lots by a human or with an LLM, sequential execution of a lot, human validation and closure, then moving to the next lot.">
-        <article class="flow-card">
-          <span class="number" aria-hidden="true">01</span>
-          <h3>Specify the product</h3>
-          <p>Define what needs to be built and why. This initial intent is the starting point for the project's documentation.</p>
-        </article>
-        <article class="flow-card">
-          <span class="number" aria-hidden="true">02</span>
-          <h3>Break the work into lots</h3>
-          <p>Humans or LLMs prepare the lots. Each planned lot has its <strong>SPEC</strong> and <strong>GATES</strong> ; <strong>STATUS</strong> follows its state.</p>
-        </article>
-        <article class="flow-card">
-          <span class="number" aria-hidden="true">03</span>
-          <h3>Execute a lot</h3>
-          <p>The LLM reconstructs the context, follows the SPEC, develops and records discoveries in FINDINGS.</p>
-        </article>
-        <article class="flow-card">
-          <span class="number" aria-hidden="true">04</span>
-          <h3>Validate and close</h3>
-          <p>Gates are evaluated. The human accepts the result; convergence is finalized, then STATUS is updated.</p>
-        </article>
-      </div>
+      <figure class="cycle-figure">
+        <img src="SAW-3.2-CYCLE.svg" width="1200" height="850" alt="Product specification and lot planning precede the cycle. For each lot: start, build and document, evaluate the gates, then accept and close. The next lot returns to the start.">
+      </figure>
       <aside class="subflow" aria-labelledby="subflow-title">
         <h3 id="subflow-title">And what about sub-lots?</h3>
         <div>
