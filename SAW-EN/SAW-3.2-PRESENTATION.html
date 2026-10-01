@@ -50,6 +50,7 @@
     .topbar nav { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; }
     .topbar nav a { color: var(--muted); font-size: .9rem; font-weight: 650; text-decoration: none; }
     .topbar nav a:hover { color: var(--text); }
+    .topbar nav .language-link { border-left: 1px solid var(--line); padding-left: 1.4rem; color: var(--cyan); }
     .hero { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(2rem, 6vw, 6rem); padding-block: clamp(4rem, 8vw, 7.2rem); }
     .hero .lead { max-width: 59ch; color: #d1e1ef; font-size: clamp(1.12rem, 1.8vw, 1.3rem); }
     .hero .support { max-width: 62ch; }
@@ -118,6 +119,7 @@
       .wrap { width: min(100% - 1.5rem, 1160px); }
       .topbar { align-items: flex-start; flex-direction: column; }
       .topbar nav { gap: .8rem; }
+      .topbar nav .language-link { padding-left: .8rem; }
       .flow, .mini-grid { grid-template-columns: 1fr; }
       .flow-card { min-height: 0; }
       .flow-card:not(:last-child)::after { top: auto; right: calc(50% - .62rem); bottom: -.64rem; transform: rotate(135deg); }
@@ -138,6 +140,7 @@
       <a href="#vision">The Idea</a>
       <a href="#cycle">The Cycle</a>
       <a href="#lot">A Lot in Practice</a>
+      <a class="language-link" href="../SAW-FR/SAW-3.2-PRESENTATION.html" hreflang="fr" lang="fr">Version FR</a>
     </nav>
   </header>
 
