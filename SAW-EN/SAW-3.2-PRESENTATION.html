@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="S.A.W. (SDD Another Way) 3.2: a Spec-Driven Development method an LLM can follow without dedicated tooling.">
+  <title>S.A.W. (SDD Another Way) 3.2 — SDD, Another Way</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080d14;
+      --surface: #101b29;
+      --surface-raised: #142235;
+      --line: #294057;
+      --text: #ecf4fb;
+      --muted: #abc0d3;
+      --cyan: #7de1e5;
+      --blue: #93b8ff;
+      --gold: #f3cf83;
+      --green: #a9dfb0;
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 70% -8%, #19314a 0, transparent 34rem), var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--cyan); text-underline-offset: .2em; }
+    a:hover { color: #bbf9fa; }
+    a:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 3px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.16; letter-spacing: -.035em; }
+    h1 { max-width: 14ch; margin-bottom: 1.2rem; font-size: clamp(2.6rem, 6vw, 5.15rem); }
+    h2 { margin-bottom: .75rem; font-size: clamp(1.8rem, 3vw, 2.65rem); }
+    h3 { margin-bottom: .55rem; font-size: 1.1rem; }
+    p { color: var(--muted); }
+    strong { color: var(--text); }
+    .wrap { width: min(1160px, calc(100% - 3rem)); margin-inline: auto; }
+    .wordmark { white-space: nowrap; }
+    .eyebrow { color: var(--cyan); font-size: .79rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1.5rem; }
+    .brand { display: flex; align-items: center; gap: 1rem; min-width: 0; color: var(--text); font-weight: 800; text-decoration: none; }
+    .brand img { display: block; width: clamp(210px, 24vw, 270px); height: auto; padding: 4px; border-radius: 12px; background: #fff; }
+    .brand span { font-size: .9rem; }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; }
+    .topbar nav a { color: var(--muted); font-size: .9rem; font-weight: 650; text-decoration: none; }
+    .topbar nav a:hover { color: var(--text); }
+    .hero { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(2rem, 6vw, 6rem); padding-block: clamp(4rem, 8vw, 7.2rem); }
+    .hero .lead { max-width: 59ch; color: #d1e1ef; font-size: clamp(1.12rem, 1.8vw, 1.3rem); }
+    .hero .support { max-width: 62ch; }
+    .hero-card { position: relative; overflow: hidden; border: 1px solid #38556d; border-radius: 26px; background: linear-gradient(150deg, #173148, #0f1b2a 64%); padding: clamp(1.5rem, 4vw, 2.6rem); box-shadow: 0 24px 70px #0006; }
+    .hero-card::before { position: absolute; top: -6rem; right: -7rem; width: 19rem; height: 19rem; border-radius: 50%; background: #54cdd41a; content: ""; }
+    .hero-card .label { position: relative; margin-bottom: 2rem; color: var(--gold); font-size: .8rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    blockquote { position: relative; margin: 0; font-size: clamp(1.35rem, 2.3vw, 2.05rem); font-weight: 700; line-height: 1.35; letter-spacing: -.03em; }
+    blockquote::before { display: block; height: .7em; color: var(--cyan); content: "“"; font-size: 4rem; line-height: .7; }
+    .hero-card .caption { position: relative; margin: 1.6rem 0 0; color: #a9c4d6; font-size: .85rem; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+    .pill { border: 1px solid #3c5970; border-radius: 999px; padding: .35rem .7rem; color: #d0e6f1; font-size: .79rem; font-weight: 700; }
+    section { padding-block: clamp(3.4rem, 7vw, 6rem); }
+    section + section { border-top: 1px solid #203245; }
+    .section-intro { max-width: 72ch; margin-bottom: 2rem; }
+    .section-intro p { margin-bottom: 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; counter-reset: stage; }
+    .flow-card { position: relative; min-height: 230px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 1.4rem; }
+    .flow-card:not(:last-child)::after { position: absolute; top: 45%; right: -.64rem; z-index: 2; width: 1.25rem; height: 1.25rem; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); background: var(--surface); content: ""; transform: rotate(45deg); }
+    .flow-card:nth-child(2) { border-color: #486578; }
+    .flow-card:nth-child(3) { border-color: #437885; background: #122735; }
+    .flow-card:nth-child(4) { border-color: #5f6559; }
+    .flow-card .number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: 1.15rem; border-radius: 50%; background: #204653; color: var(--cyan); font-size: .82rem; font-weight: 900; }
+    .flow-card h3 { font-size: 1.18rem; }
+    .flow-card p { margin-bottom: 0; font-size: .91rem; }
+    .subflow { display: grid; grid-template-columns: minmax(150px, .27fr) 1fr; gap: 1.25rem; margin-top: 1.2rem; border: 1px solid #536b6d; border-radius: var(--radius); background: #12232c; padding: 1.2rem 1.4rem; }
+    .subflow h3 { margin-bottom: 0; color: var(--gold); }
+    .subflow p { margin-bottom: .5rem; font-size: .92rem; }
+    .subflow .path { margin-bottom: 0; color: var(--cyan); font-size: .85rem; font-weight: 800; }
+    .flow-caption { margin: 1.2rem 0 0; color: var(--green); font-size: .91rem; font-weight: 650; text-align: right; }
+    .journey { display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(280px, .62fr); gap: 1.2rem; align-items: start; }
+    .process, .aside-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .process { margin: 0; padding: 1rem 1.5rem 1rem 4.2rem; list-style: none; counter-reset: step; }
+    .process li { position: relative; min-height: 5.2rem; padding: 1.05rem 0 1.15rem .35rem; border-left: 2px solid #376070; counter-increment: step; }
+    .process li:last-child { border-left-color: transparent; }
+    .process li::before { position: absolute; top: 1.05rem; left: -2.85rem; display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid #558594; border-radius: 50%; background: #173543; color: var(--cyan); content: counter(step, decimal-leading-zero); font-size: .76rem; font-weight: 900; }
+    .process h3 { margin-bottom: .28rem; }
+    .process p { max-width: 68ch; margin-bottom: 0; font-size: .92rem; }
+    .process code, .prompt { border: 1px solid #31546a; border-radius: 6px; background: #0b1825; color: #d8f5f3; font: .9em ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .process code { padding: .08rem .28rem; }
+    .prompt { display: block; width: fit-content; max-width: 100%; margin-top: .65rem; padding: .5rem .7rem; overflow-wrap: anywhere; }
+    .aside-stack { display: grid; gap: 1.2rem; }
+    .aside-card { padding: 1.3rem; }
+    .aside-card h3 { color: var(--gold); }
+    .aside-card p:last-child { margin-bottom: 0; }
+    .gate-list { display: grid; gap: .5rem; margin: .8rem 0 0; padding: 0; list-style: none; }
+    .gate-list li { display: grid; grid-template-columns: 4.4rem 1fr; gap: .7rem; align-items: start; border-top: 1px solid #284153; padding-top: .55rem; color: var(--muted); font-size: .9rem; }
+    .gate-list strong { color: var(--cyan); font-size: .78rem; letter-spacing: .06em; }
+    .gate-list li:last-child strong { color: var(--gold); }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .mini-grid article { border-top: 2px solid #466b78; padding-top: 1rem; }
+    .mini-grid article:nth-child(2) { border-color: var(--blue); }
+    .mini-grid article:nth-child(3) { border-color: var(--gold); }
+    .mini-grid p { margin-bottom: 0; font-size: .94rem; }
+    .source { margin-top: 2.2rem; border-left: 3px solid var(--cyan); padding: .1rem 0 .1rem 1rem; color: var(--muted); font-size: .88rem; }
+    .source p { margin-bottom: .4rem; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #203245; padding-block: 2rem 3rem; color: #8ca8be; font-size: .82rem; }
+    footer p { margin: 0; }
+    @media (max-width: 850px) {
+      .hero, .journey, .subflow { grid-template-columns: 1fr; }
+      .hero { padding-top: 3rem; }
+      .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-card:nth-child(2)::after { display: none; }
+      .flow-caption { text-align: left; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 1.5rem, 1160px); }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .topbar nav { gap: .8rem; }
+      .flow, .mini-grid { grid-template-columns: 1fr; }
+      .flow-card { min-height: 0; }
+      .flow-card:not(:last-child)::after { top: auto; right: calc(50% - .62rem); bottom: -.64rem; transform: rotate(135deg); }
+      .flow-card:nth-child(2)::after { display: block; }
+      .process { padding-right: 1rem; padding-left: 3.65rem; }
+      .process li::before { left: -2.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="#accueil" aria-label="Return to the beginning of the S.A.W. (SDD Another Way) presentation">
+      <img src="SAW-LOGO-FINAL.png" alt="S.A.W. (SDD Another Way) logo" width="867" height="284">
+      <span>S.A.W. (SDD Another Way) · version 3.2</span>
+    </a>
+    <nav aria-label="Page navigation">
+      <a href="#vision">The Idea</a>
+      <a href="#cycle">The Cycle</a>
+      <a href="#lot">A Lot in Practice</a>
+    </nav>
+  </header>
+
+  <main id="accueil">
+    <div class="hero wrap" id="vision">
+      <div>
+        <p class="eyebrow">Spec-Driven Development · AI-centric</p>
+        <h1>SDD, another way</h1>
+        <p class="lead"><strong class="wordmark">S.A.W. (SDD Another Way)</strong> 3.2 organizes development around documented intent, one lot of work after another, and explicit validation. An LLM can do the work and keep the documents up to date; people make the decisions reserved for them.</p>
+        <p class="support">The method is rooted in <em>Spec-Driven Development</em> (SDD): starting from a shared specification to connect requirements, implementation, and validation. It stems from Pro-Spec 3, a method created and refined over dozens of implementations with AI.</p>
+        <p class="support">A <strong>project</strong> can cover an entire application, a major feature, or even a complex visual control. Multiple projects can belong to an <strong>Application</strong> placed above them, with its general rules and coordination documents. They can advance in parallel if an explicit architectural decision defines their independence and the management of their shared resources; each project maintains only one active lot at a time.</p>
+        <div class="pill-row" aria-label="Features">
+          <span class="pill">No proprietary tooling</span>
+          <span class="pill">Any programming language</span>
+          <span class="pill">All operating systems</span>
+          <span class="pill">Portable Markdown</span>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Founding Principle">
+        <p class="label">The AI-centric stance</p>
+        <blockquote>If AI can build software complex enough to need a method, it can also handle that method’s paperwork.</blockquote>
+        <p class="caption">The documentation protocol remains readable and applicable manually. No agent, IDE, version control system, or utility specific to the method is imposed; an automated gate can naturally use a build or test command.</p>
+      </aside>
+    </div>
+
+    <section id="cycle" class="wrap" aria-labelledby="cycle-title">
+      <div class="section-intro">
+        <p class="eyebrow">Overview</p>
+        <h2 id="cycle-title">From initial requirement to finished product</h2>
+        <p>The initial product specification comes first. People can divide the work into lots or prepare that breakdown with an LLM. Each recognized lot then has its own objective and conditions for closure.</p>
+      </div>
+      <div class="flow" role="img" aria-label="Cycle: initial product specification, division into lots by a human or with an LLM, sequential execution of a lot, human validation and closure, then moving to the next lot.">
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">01</span>
+          <h3>Specify the product</h3>
+          <p>Define what needs to be built and why. This initial intent is the starting point for the project's documentation.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">02</span>
+          <h3>Break the work into lots</h3>
+          <p>Humans or LLMs prepare the lots. Each planned lot has its <strong>SPEC</strong> and <strong>GATES</strong> ; <strong>STATUS</strong> follows its state.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">03</span>
+          <h3>Execute a lot</h3>
+          <p>The LLM reconstructs the context, follows the SPEC, develops and records discoveries in FINDINGS.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">04</span>
+          <h3>Validate and close</h3>
+          <p>Gates are evaluated. The human accepts the result; convergence is finalized, then STATUS is updated.</p>
+        </article>
+      </div>
+      <aside class="subflow" aria-labelledby="subflow-title">
+        <h3 id="subflow-title">And what about sub-lots?</h3>
+        <div>
+          <p>During execution, a human can isolate part of the work into a sub-lot with its own SPEC, FINDINGS, and GATES. This allows handling that objective and its validations without losing track of the parent lot.</p>
+          <p class="path">Active parent → parent in Stand-by, sub-lot alone active → sub-lot closed, cancelled, or replaced → return to parent decided by the human after reviewing its impact.</p>
+        </div>
+      </aside>
+      <p class="flow-caption">↶ After closure, resume with the next planned lot. Only one lot occupies the active slot of a project.</p>
+    </section>
+
+    <section id="lot" class="wrap" aria-labelledby="lot-title">
+      <div class="section-intro">
+        <p class="eyebrow">The lifecycle of a lot</p>
+        <h2 id="lot-title">A simple instruction, a complete protocol</h2>
+        <p>The prompt can be short because the rules, state, decisions, and validations reside in project files. The diagram below shows what the LLM actually does.</p>
+      </div>
+      <div class="journey">
+        <ol class="process" aria-label="Lot workflow">
+          <li>
+            <h3>The human initiates work</h3>
+            <p>They authorize the start. If several <code>Planned</code> lots could come next, the LLM checks dependencies and asks a human to resolve any ambiguity.</p>
+            <span class="prompt">"Read the README file and start the next lot."</span>
+          </li>
+          <li>
+            <h3>The LLM reconstructs context</h3>
+            <p>It reads <code>README.md</code>, <code>PROJECT.md</code>, <code>RULES.md</code>, applicable decisions from <code>LEDGER.md</code>, then <code>STATUS.md</code> and lot files. <code>HISTORY.md</code> is mandatory and traces significant operations.</p>
+          </li>
+          <li>
+            <h3>The lot executes</h3>
+            <p><code>SPEC-xxx.md</code> defines the expected result; <code>GATES-xxx.md</code> defines closure conditions. The LLM performs work, enriches <code>FINDINGS-xxx.md</code> , and documents approved semantic changes.</p>
+          </li>
+          <li>
+            <h3>Gates are evaluated</h3>
+            <p>The LLM can launch an <code>AUTO</code> gate and analyze an <code>LLM</code>gate. An <code>HUMAN</code> gate requires a dated, named human validation. The evaluated result must remain identifiable.</p>
+          </li>
+          <li>
+            <h3>Closure is presented to the human</h3>
+            <p>On request, the LLM checks all active gates, each requirement, and final processing of every finding. It prepares <code>CONVERGENCE-xxx.md</code>, records required human decisions in <code>LEDGER.md</code>, then presents the result and its deviations. A failed or untested gate prevents closure.</p>
+          </li>
+          <li>
+            <h3>The human accepts, then the cycle resumes</h3>
+            <p>After acceptance, the LLM finalizes convergence and approved updates, then records <code>Closed</code> in <code>STATUS.md</code> last among state and content documents. The project can then proceed to the next lot.</p>
+          </li>
+        </ol>
+        <div class="aside-stack">
+          <aside class="aside-card" aria-labelledby="gates-title">
+            <h3 id="gates-title">Three gate types</h3>
+            <ul class="gate-list">
+              <li><strong>AUTO</strong><span>Deterministic verdict from a command or control.</span></li>
+              <li><strong>LLM</strong><span>Semantic analysis justified and documented.</span></li>
+              <li><strong>HUMAN</strong><span>Verdict reserved for a person; the LLM cannot declare it achieved.</span></li>
+            </ul>
+          </aside>
+          <aside class="aside-card" aria-labelledby="branch-title">
+            <h3 id="branch-title">If the path deviates</h3>
+            <p>A correction or invalidated validation returns the lot to <strong>In-progress</strong>. A blockage passes through <strong>Blocked</strong> and stops other project lots. A sub-lot suspends its parent in <strong>Stand-by</strong>.</p>
+          </aside>
+          <aside class="aside-card" aria-labelledby="truth-title">
+            <h3 id="truth-title">Files hold the truth</h3>
+            <p><strong>STATUS</strong> is authority on state; <strong>SPEC</strong> on intent; <strong>LEDGER</strong> preserves decisions; <strong>HISTORY</strong> traces operations. Documents remain usable without conversation history.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="takeaway-title">
+      <div class="section-intro">
+        <p class="eyebrow">In practice</p>
+        <h2 id="takeaway-title">A portable method, visible decisions</h2>
+      </div>
+      <div class="mini-grid">
+        <article>
+          <h3>AI-centric</h3>
+          <p>The same LLM can generate the software and manage document tracking. Humans retain intent, trade-offs, and acceptance.</p>
+        </article>
+        <article>
+          <h3>Independent</h3>
+          <p>Markdown is sufficient for the protocol. The software language, OS, IDE, and LLM provider remain up to the project's choice.</p>
+        </article>
+        <article>
+          <h3>Traceable</h3>
+          <p>Requirements, discoveries, decisions, validations, and deviations remain readable from session to session until closure.</p>
+        </article>
+      </div>
+      <div class="source">
+        <p><strong>SDD Reference:</strong> Apoorv Gupta, <a href="https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/" target="_blank" rel="noopener noreferrer"><em>Spec-Driven Development: A Spec-First Approach to AI-Native Engineering</em></a>, Microsoft for Developers, June 10, 2026.</p>
+        <p><strong>Method Reference:</strong> Olivier Dahan, Microsoft MVP, creator of S.A.W. (SDD Another Way); normative specification 3.2, revision <code>3.2.0-2026-09-27</code>.</p>
+        <p><strong>Full Specification:</strong> <a href="SAW-3.2-SPECIFICATION.md">Read the S.A.W. (SDD Another Way) 3.2 Normative Specification</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>S.A.W. (SDD Another Way) 3.2</p>
+    <p>Executive Summary · the normative specification prevails for execution.</p>
+  </footer>
+</body>
+</html>

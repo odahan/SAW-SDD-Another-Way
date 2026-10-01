@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Présentation de S.A.W. (SDD Another Way) 3.2 : une méthode de Spec-Driven Development pilotable par un LLM, sans outil propre à la méthode.">
+  <title>S.A.W. (SDD Another Way) 3.2 — Le SDD, une autre voie</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080d14;
+      --surface: #101b29;
+      --surface-raised: #142235;
+      --line: #294057;
+      --text: #ecf4fb;
+      --muted: #abc0d3;
+      --cyan: #7de1e5;
+      --blue: #93b8ff;
+      --gold: #f3cf83;
+      --green: #a9dfb0;
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 70% -8%, #19314a 0, transparent 34rem), var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--cyan); text-underline-offset: .2em; }
+    a:hover { color: #bbf9fa; }
+    a:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 3px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { line-height: 1.16; letter-spacing: -.035em; }
+    h1 { max-width: 14ch; margin-bottom: 1.2rem; font-size: clamp(2.6rem, 6vw, 5.15rem); }
+    h2 { margin-bottom: .75rem; font-size: clamp(1.8rem, 3vw, 2.65rem); }
+    h3 { margin-bottom: .55rem; font-size: 1.1rem; }
+    p { color: var(--muted); }
+    strong { color: var(--text); }
+    .wrap { width: min(1160px, calc(100% - 3rem)); margin-inline: auto; }
+    .wordmark { white-space: nowrap; }
+    .eyebrow { color: var(--cyan); font-size: .79rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .topbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem; padding-block: 1.5rem; }
+    .brand { display: flex; align-items: center; gap: 1rem; min-width: 0; color: var(--text); font-weight: 800; text-decoration: none; }
+    .brand img { display: block; width: clamp(210px, 24vw, 270px); height: auto; padding: 4px; border-radius: 12px; background: #fff; }
+    .brand span { font-size: .9rem; }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; }
+    .topbar nav a { color: var(--muted); font-size: .9rem; font-weight: 650; text-decoration: none; }
+    .topbar nav a:hover { color: var(--text); }
+    .hero { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: clamp(2rem, 6vw, 6rem); padding-block: clamp(4rem, 8vw, 7.2rem); }
+    .hero .lead { max-width: 59ch; color: #d1e1ef; font-size: clamp(1.12rem, 1.8vw, 1.3rem); }
+    .hero .support { max-width: 62ch; }
+    .hero-card { position: relative; overflow: hidden; border: 1px solid #38556d; border-radius: 26px; background: linear-gradient(150deg, #173148, #0f1b2a 64%); padding: clamp(1.5rem, 4vw, 2.6rem); box-shadow: 0 24px 70px #0006; }
+    .hero-card::before { position: absolute; top: -6rem; right: -7rem; width: 19rem; height: 19rem; border-radius: 50%; background: #54cdd41a; content: ""; }
+    .hero-card .label { position: relative; margin-bottom: 2rem; color: var(--gold); font-size: .8rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    blockquote { position: relative; margin: 0; font-size: clamp(1.35rem, 2.3vw, 2.05rem); font-weight: 700; line-height: 1.35; letter-spacing: -.03em; }
+    blockquote::before { display: block; height: .7em; color: var(--cyan); content: "“"; font-size: 4rem; line-height: .7; }
+    .hero-card .caption { position: relative; margin: 1.6rem 0 0; color: #a9c4d6; font-size: .85rem; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+    .pill { border: 1px solid #3c5970; border-radius: 999px; padding: .35rem .7rem; color: #d0e6f1; font-size: .79rem; font-weight: 700; }
+    section { padding-block: clamp(3.4rem, 7vw, 6rem); }
+    section + section { border-top: 1px solid #203245; }
+    .section-intro { max-width: 72ch; margin-bottom: 2rem; }
+    .section-intro p { margin-bottom: 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; counter-reset: stage; }
+    .flow-card { position: relative; min-height: 230px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 1.4rem; }
+    .flow-card:not(:last-child)::after { position: absolute; top: 45%; right: -.64rem; z-index: 2; width: 1.25rem; height: 1.25rem; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); background: var(--surface); content: ""; transform: rotate(45deg); }
+    .flow-card:nth-child(2) { border-color: #486578; }
+    .flow-card:nth-child(3) { border-color: #437885; background: #122735; }
+    .flow-card:nth-child(4) { border-color: #5f6559; }
+    .flow-card .number { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-bottom: 1.15rem; border-radius: 50%; background: #204653; color: var(--cyan); font-size: .82rem; font-weight: 900; }
+    .flow-card h3 { font-size: 1.18rem; }
+    .flow-card p { margin-bottom: 0; font-size: .91rem; }
+    .subflow { display: grid; grid-template-columns: minmax(150px, .27fr) 1fr; gap: 1.25rem; margin-top: 1.2rem; border: 1px solid #536b6d; border-radius: var(--radius); background: #12232c; padding: 1.2rem 1.4rem; }
+    .subflow h3 { margin-bottom: 0; color: var(--gold); }
+    .subflow p { margin-bottom: .5rem; font-size: .92rem; }
+    .subflow .path { margin-bottom: 0; color: var(--cyan); font-size: .85rem; font-weight: 800; }
+    .flow-caption { margin: 1.2rem 0 0; color: var(--green); font-size: .91rem; font-weight: 650; text-align: right; }
+    .journey { display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(280px, .62fr); gap: 1.2rem; align-items: start; }
+    .process, .aside-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+    .process { margin: 0; padding: 1rem 1.5rem 1rem 4.2rem; list-style: none; counter-reset: step; }
+    .process li { position: relative; min-height: 5.2rem; padding: 1.05rem 0 1.15rem .35rem; border-left: 2px solid #376070; counter-increment: step; }
+    .process li:last-child { border-left-color: transparent; }
+    .process li::before { position: absolute; top: 1.05rem; left: -2.85rem; display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid #558594; border-radius: 50%; background: #173543; color: var(--cyan); content: counter(step, decimal-leading-zero); font-size: .76rem; font-weight: 900; }
+    .process h3 { margin-bottom: .28rem; }
+    .process p { max-width: 68ch; margin-bottom: 0; font-size: .92rem; }
+    .process code, .prompt { border: 1px solid #31546a; border-radius: 6px; background: #0b1825; color: #d8f5f3; font: .9em ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .process code { padding: .08rem .28rem; }
+    .prompt { display: block; width: fit-content; max-width: 100%; margin-top: .65rem; padding: .5rem .7rem; overflow-wrap: anywhere; }
+    .aside-stack { display: grid; gap: 1.2rem; }
+    .aside-card { padding: 1.3rem; }
+    .aside-card h3 { color: var(--gold); }
+    .aside-card p:last-child { margin-bottom: 0; }
+    .gate-list { display: grid; gap: .5rem; margin: .8rem 0 0; padding: 0; list-style: none; }
+    .gate-list li { display: grid; grid-template-columns: 4.4rem 1fr; gap: .7rem; align-items: start; border-top: 1px solid #284153; padding-top: .55rem; color: var(--muted); font-size: .9rem; }
+    .gate-list strong { color: var(--cyan); font-size: .78rem; letter-spacing: .06em; }
+    .gate-list li:last-child strong { color: var(--gold); }
+    .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .mini-grid article { border-top: 2px solid #466b78; padding-top: 1rem; }
+    .mini-grid article:nth-child(2) { border-color: var(--blue); }
+    .mini-grid article:nth-child(3) { border-color: var(--gold); }
+    .mini-grid p { margin-bottom: 0; font-size: .94rem; }
+    .source { margin-top: 2.2rem; border-left: 3px solid var(--cyan); padding: .1rem 0 .1rem 1rem; color: var(--muted); font-size: .88rem; }
+    .source p { margin-bottom: .4rem; }
+    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #203245; padding-block: 2rem 3rem; color: #8ca8be; font-size: .82rem; }
+    footer p { margin: 0; }
+    @media (max-width: 850px) {
+      .hero, .journey, .subflow { grid-template-columns: 1fr; }
+      .hero { padding-top: 3rem; }
+      .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow-card:nth-child(2)::after { display: none; }
+      .flow-caption { text-align: left; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 1.5rem, 1160px); }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .topbar nav { gap: .8rem; }
+      .flow, .mini-grid { grid-template-columns: 1fr; }
+      .flow-card { min-height: 0; }
+      .flow-card:not(:last-child)::after { top: auto; right: calc(50% - .62rem); bottom: -.64rem; transform: rotate(135deg); }
+      .flow-card:nth-child(2)::after { display: block; }
+      .process { padding-right: 1rem; padding-left: 3.65rem; }
+      .process li::before { left: -2.6rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="#accueil" aria-label="Retour au début de la présentation de S.A.W. (SDD Another Way)">
+      <img src="SAW-LOGO-FINAL.png" alt="Logo de S.A.W. (SDD Another Way)" width="867" height="284">
+      <span>S.A.W. (SDD Another Way) · version 3.2</span>
+    </a>
+    <nav aria-label="Navigation de la page">
+      <a href="#vision">L'idée</a>
+      <a href="#cycle">Le cycle</a>
+      <a href="#lot">Un lot en pratique</a>
+    </nav>
+  </header>
+
+  <main id="accueil">
+    <div class="hero wrap" id="vision">
+      <div>
+        <p class="eyebrow">Spec-Driven Development · AI centric</p>
+        <h1>SDD, d'une autre façon</h1>
+        <p class="lead"><strong class="wordmark">S.A.W. (SDD Another Way)</strong> 3.2 organise le développement autour d'une intention écrite, de lots successifs et de validations explicites. Le LLM peut mener le travail et tenir les documents ; l'humain garde les décisions qui lui appartiennent.</p>
+        <p class="support">La méthode s'inscrit dans le <em>Spec-Driven Development</em> (SDD) : partir d'une spécification partagée pour relier besoins, réalisation et validation. Elle est issue de Pro-Spec 3, méthode créée et affinée au fil de dizaines de réalisations avec l'IA.</p>
+        <p class="support">Un <strong>projet</strong> peut couvrir une application entière, une fonctionnalité importante ou même un contrôle visuel complexe. Plusieurs projets peuvent appartenir à une <strong>Application</strong> placée au-dessus d'eux, avec ses règles générales et ses documents de coordination. Ils peuvent avancer en parallèle si une décision architecturale explicite définit leur indépendance et la gestion de leurs ressources partagées ; chaque projet garde un seul lot actif à la fois.</p>
+        <div class="pill-row" aria-label="Caractéristiques">
+          <span class="pill">Sans outil propre à la méthode</span>
+          <span class="pill">Tous langages</span>
+          <span class="pill">Tous systèmes d'exploitation</span>
+          <span class="pill">Markdown portable</span>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Principe fondateur">
+        <p class="label">Le parti pris AI centric</p>
+        <blockquote>Si vous disposez d'une IA assez puissante pour réaliser un logiciel assez gros pour justifier une méthode, alors cette IA est suffisante pour gérer toute la bureaucratie de la méthode.</blockquote>
+        <p class="caption">Le protocole documentaire reste lisible et applicable manuellement. Aucun agent, IDE, système de versions ou utilitaire propre à la méthode n'est imposé ; une gate automatique peut naturellement utiliser une commande de build ou de test.</p>
+      </aside>
+    </div>
+
+    <section id="cycle" class="wrap" aria-labelledby="cycle-title">
+      <div class="section-intro">
+        <p class="eyebrow">Vue d'ensemble</p>
+        <h2 id="cycle-title">Du besoin initial au produit réalisé</h2>
+        <p>La spécification initiale du produit précède la méthode. Le découpage peut être fait par des humains ou préparé avec un LLM ; chaque lot reconnu dispose ensuite de sa propre intention et de ses conditions de fermeture.</p>
+      </div>
+      <div class="flow" role="img" aria-label="Cycle : spécification initiale du produit, découpage en lots par un humain ou avec un LLM, exécution séquentielle d'un lot, validation et fermeture humaines, puis passage au lot suivant.">
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">01</span>
+          <h3>Spécifier le produit</h3>
+          <p>Définir ce qu'il faut construire et pourquoi. Cette intention initiale sert de point de départ au projet documentaire.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">02</span>
+          <h3>Découper en lots</h3>
+          <p>Humains ou LLM préparent les lots. Chaque lot planifié a sa <strong>SPEC</strong> et ses <strong>GATES</strong> ; <strong>STATUS</strong> en suit l'état.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">03</span>
+          <h3>Réaliser un lot</h3>
+          <p>Le LLM reconstruit le contexte, suit la SPEC, développe et consigne les découvertes dans FINDINGS.</p>
+        </article>
+        <article class="flow-card">
+          <span class="number" aria-hidden="true">04</span>
+          <h3>Valider et fermer</h3>
+          <p>Les gates sont évaluées. L'humain accepte le résultat ; la convergence est finalisée, puis STATUS est mis à jour.</p>
+        </article>
+      </div>
+      <aside class="subflow" aria-labelledby="subflow-title">
+        <h3 id="subflow-title">Et les sous-lots ?</h3>
+        <div>
+          <p>Pendant l'exécution, un humain peut isoler une partie du travail dans un sous-lot doté de sa propre SPEC, de ses FINDINGS et de ses GATES. Cela permet de traiter cet objectif et ses validations sans perdre le fil du lot parent.</p>
+          <p class="path">Parent actif → parent en Stand-by, sous-lot seul actif → sous-lot fermé, annulé ou remplacé → retour au parent décidé par l'humain après examen de son impact.</p>
+        </div>
+      </aside>
+      <p class="flow-caption">↶ Après fermeture, reprendre au prochain lot planifié. Un seul lot occupe le créneau actif d'un projet.</p>
+    </section>
+
+    <section id="lot" class="wrap" aria-labelledby="lot-title">
+      <div class="section-intro">
+        <p class="eyebrow">Le cycle d'un lot</p>
+        <h2 id="lot-title">Une consigne simple, un protocole complet</h2>
+        <p>Le prompt peut être court parce que les règles, l'état, les décisions et les validations se trouvent dans les fichiers du projet. Le schéma ci-dessous montre ce que le LLM doit réellement faire.</p>
+      </div>
+      <div class="journey">
+        <ol class="process" aria-label="Déroulement d'un lot">
+          <li>
+            <h3>L'humain lance le travail</h3>
+            <p>Il autorise le démarrage. Si plusieurs lots <code>Planned</code> sont possibles, le LLM vérifie les dépendances et fait trancher le choix ambigu.</p>
+            <span class="prompt">« Lis le fichier README et lance le prochain lot. »</span>
+          </li>
+          <li>
+            <h3>Le LLM reconstruit le contexte</h3>
+            <p>Il lit <code>README.md</code>, <code>PROJECT.md</code>, <code>RULES.md</code>, les décisions applicables de <code>LEDGER.md</code>, puis <code>STATUS.md</code> et les fichiers du lot. <code>HISTORY.md</code> est obligatoire et retrace les opérations significatives.</p>
+          </li>
+          <li>
+            <h3>Le lot est exécuté</h3>
+            <p><code>SPEC-xxx.md</code> fixe le résultat attendu ; <code>GATES-xxx.md</code> fixe les conditions de fermeture. Le LLM réalise le travail, enrichit <code>FINDINGS-xxx.md</code> et documente les changements de sens approuvés.</p>
+          </li>
+          <li>
+            <h3>Les gates sont évaluées</h3>
+            <p>Le LLM peut lancer une gate <code>AUTO</code> et analyser une gate <code>LLM</code>. Une gate <code>HUMAN</code> exige une validation humaine datée et nominative. Le résultat évalué doit rester identifiable.</p>
+          </li>
+          <li>
+            <h3>La fermeture est présentée à l'humain</h3>
+            <p>À sa demande, le LLM vérifie toutes les gates actives, chaque exigence et le traitement final de chaque finding. Il prépare <code>CONVERGENCE-xxx.md</code>, fait consigner les décisions humaines requises dans <code>LEDGER.md</code>, puis présente le résultat et ses écarts. Une gate en échec ou non testée empêche la fermeture.</p>
+          </li>
+          <li>
+            <h3>L'humain accepte, puis le cycle reprend</h3>
+            <p>Après acceptation, le LLM finalise la convergence et les mises à jour approuvées, puis inscrit <code>Closed</code> dans <code>STATUS.md</code> en dernier parmi les documents d'état et de contenu. Le projet peut alors avancer vers le lot suivant.</p>
+          </li>
+        </ol>
+        <div class="aside-stack">
+          <aside class="aside-card" aria-labelledby="gates-title">
+            <h3 id="gates-title">Trois types de gates</h3>
+            <ul class="gate-list">
+              <li><strong>AUTO</strong><span>Verdict déterministe d'une commande ou d'un contrôle.</span></li>
+              <li><strong>LLM</strong><span>Analyse sémantique justifiée et documentée.</span></li>
+              <li><strong>HUMAN</strong><span>Verdict réservé à une personne ; le LLM ne peut pas le déclarer acquis.</span></li>
+            </ul>
+          </aside>
+          <aside class="aside-card" aria-labelledby="branch-title">
+            <h3 id="branch-title">Si le parcours dévie</h3>
+            <p>Une correction ou une validation devenue invalide ramène le lot à <strong>In-progress</strong>. Un blocage passe par <strong>Blocked</strong> et arrête les autres lots du projet. Un sous-lot suspend son parent en <strong>Stand-by</strong>.</p>
+          </aside>
+          <aside class="aside-card" aria-labelledby="truth-title">
+            <h3 id="truth-title">Les fichiers font foi</h3>
+            <p><strong>STATUS</strong> est l'autorité sur l'état ; <strong>SPEC</strong> sur l'intention ; <strong>LEDGER</strong> conserve les décisions ; <strong>HISTORY</strong> retrace les opérations. Les documents restent utilisables sans historique de conversation.</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap" aria-labelledby="takeaway-title">
+      <div class="section-intro">
+        <p class="eyebrow">En pratique</p>
+        <h2 id="takeaway-title">Une méthode portable, des décisions visibles</h2>
+      </div>
+      <div class="mini-grid">
+        <article>
+          <h3>AI centric</h3>
+          <p>Le même LLM peut produire le logiciel et assurer le suivi documentaire. L'humain conserve l'intention, les arbitrages et l'acceptation.</p>
+        </article>
+        <article>
+          <h3>Indépendante</h3>
+          <p>Markdown suffit au protocole. Le langage du logiciel, l'OS, l'IDE et le fournisseur de LLM restent au choix du projet.</p>
+        </article>
+        <article>
+          <h3>Traçable</h3>
+          <p>Exigences, découvertes, décisions, validations et écarts restent lisibles d'une session à l'autre et jusqu'à la fermeture.</p>
+        </article>
+      </div>
+      <div class="source">
+        <p><strong>Référence SDD :</strong> Apoorv Gupta, <a href="https://developer.microsoft.com/blog/spec-driven-development-ai-native-engineering/" target="_blank" rel="noopener noreferrer"><em>Spec-Driven Development: A Spec-First Approach to AI-Native Engineering</em></a>, Microsoft for Developers, 10 juin 2026.</p>
+        <p><strong>Référence de la méthode :</strong> Olivier Dahan, Microsoft MVP, créateur de S.A.W. (SDD Another Way) ; spécification normative 3.2, révision <code>3.2.0-2026-09-27</code>.</p>
+        <p><strong>Spécification complète :</strong> <a href="SAW-3.2-SPECIFICATION.md">Lire la spécification normative de S.A.W. (SDD Another Way) 3.2</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>S.A.W. (SDD Another Way) 3.2</p>
+    <p>Présentation synthétique · la spécification normative prévaut pour l'exécution.</p>
+  </footer>
+</body>
+</html>
