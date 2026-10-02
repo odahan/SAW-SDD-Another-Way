@@ -1,4 +1,4 @@
-# S.A.W. 3.2 — Executable Specification
+﻿# S.A.W. 3.2 — Executable Specification
 
 Version 3.2; normative revision `3.2.0-2026-09-27`. This document defines the S.A.W. (SDD Another Way) documentation protocol, replaces 3.1, and serves as a manual reference. `MUST` = obligation, `MUST NOT` = prohibition, `SHOULD`/`SHOULD NOT` = strong recommendation/adverse recommendation (justify any deviation), `MAY` = permission; these meanings apply regardless of language. Apply all relevant obligations; examples do not create exceptions. A project MUST remain usable with Markdown files alone, without agent, LLM provider, IDE, program, script, preset, Python, hardware, Git, branches, other version control system, or proprietary format imposed. The Markdowns hold authority; no indispensable rule may reside solely in a tool, plugin, hidden prompt, runtime, or prior conversation. A command/program MAY process the deterministic, an LLM semantic understanding, Markdown durable intention; business validation returns to the human. Automation MAY verify and prepare documentation operations, MUST NOT substitute for human decisions. It SHOULD remove more complexity than it adds.
 

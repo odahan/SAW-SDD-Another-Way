@@ -1,15 +1,10 @@
-# S.A.W. 3.2 — SDD Another Way
-
-## Spécification normative du protocole
+# Pro-Spec 3 — Spécification normative du protocole
 
 ## 1. Statut du document
 
-Ce document définit le protocole documentaire de **S.A.W. — SDD Another Way**, version 3.2.
+Ce document définit le protocole documentaire de Pro-Spec 3.
 
-Révision normative : `3.2.0-2026-09-27`.
-
-S.A.W. 3.2 remplace S.A.W. 3.1. Elle définit le protocole sans dépendre d'un utilitaire, d'un agent, d'un IDE ou d'un système de gestion de versions.
-Il a été prouvé par la mise en application de SAW sur plusieurs projets que le LLM servant à coder pouvait fort bien suivre et s'occuper de la "bureacratie" sans avoir besoin d'un utilitaire séparé. En dehors de cette utilisation rationnelle et cohérente de la méthode, cette dernière peut être entièrement suivie "manuellement", elle a été conçue pour cela. Mais puisque l'IA est déjà présente pour produire le code, l'utiliser pour le suivi des documents de la méthode semble naturel et logique.
+Révision normative : `2026-09-24.5`.
 
 Il décrit :
 
@@ -20,13 +15,16 @@ Il décrit :
 - les validations ;
 - la fermeture ;
 - la capitalisation ;
-- le regroupement structuré de projets dans une Application.
+- le regroupement facultatif de projets dans une Application ;
+- les conditions minimales de conformité d'un outil Pro-Spec.
 
 Le protocole manuel constitue la référence.
 
-Un projet S.A.W. MUST rester utilisable sans agent particulier, sans IDE et sans système de gestion de versions imposé.
+Un outil Pro-Spec est facultatif.
 
-La présente version n'autorise pas l'exécution parallèle de plusieurs lots dans un même projet. Des projets distincts d'une même Application MAY être exécutés simultanément selon la section 20 bis, lorsque leur contrat de parallélisme est explicite.
+Un projet Pro-Spec MUST rester utilisable sans outil Pro-Spec, sans agent particulier, sans IDE et sans système de gestion de versions imposé.
+
+La présente version n'autorise pas l'exécution parallèle de plusieurs lots dans un même projet. Des projets distincts d'une même Application MAY être exécutés simultanément selon la section 20 bis.
 
 ## 2. Vocabulaire normatif
 
@@ -40,19 +38,20 @@ Les mots suivants ont une signification normative stable, quelle que soit la lan
 | `SHOULD NOT` | Pratique fortement déconseillée. Tout écart SHOULD être justifié. |
 | `MAY` | Possibilité facultative. |
 
-## 3. Objet de S.A.W.
+## 3. Objet de Pro-Spec 3
 
-S.A.W. est une méthode de délégation et de continuité fondée sur un protocole documentaire léger.
+Pro-Spec 3 est une méthode de délégation et de continuité fondée sur un protocole documentaire léger.
 
-Un « projet S.A.W. » est une unité de pilotage documentaire. Il MAY représenter une application entière, une sous-fonction ou un autre périmètre de travail identifiable ; il ne suppose ni un projet distinct au sens organisationnel habituel, ni un dépôt de code séparé. Chaque unité conserve néanmoins sa propre racine documentaire et ses artefacts de projet.
+Un « projet Pro-Spec » est une unité de pilotage documentaire. Il MAY représenter une application entière, une sous-fonction ou un autre périmètre de travail identifiable ; il ne suppose ni un projet distinct au sens organisationnel habituel, ni un dépôt de code séparé. Chaque unité conserve néanmoins sa propre racine documentaire et ses artefacts de projet.
 
-La taille de l'équipe ou du projet n'est pas un critère d'applicabilité de S.A.W.
+La taille de l'équipe ou du projet n'est pas un critère d'applicabilité de Pro-Spec.
 
-S.A.W. se distingue par l'absence de dépendance matérielle ou logicielle propre à la méthode.
+Pro-Spec se distingue par l'absence de dépendance matérielle ou logicielle propre à la méthode.
 
 Il n'impose notamment :
 
 - aucun matériel spécifique ;
+- aucun logiciel Pro-Spec ;
 - aucun script ;
 - aucun preset ;
 - aucun environnement Python ;
@@ -83,7 +82,7 @@ Il permet de conserver explicitement :
 
 Les artefacts Markdown constituent le protocole.
 
-Le protocole est directement applicable avec des fichiers Markdown.
+Le logiciel éventuel ne fait qu'en faciliter l'application.
 
 ## 4. Principes
 
@@ -101,14 +100,15 @@ Un comportement indispensable MUST NOT résider uniquement dans :
 
 ### 4.2 Indépendance
 
-S.A.W. MUST NOT imposer :
+Pro-Spec MUST NOT imposer :
 
 - Git ;
 - un autre système de gestion de versions ;
 - un IDE ;
 - un agent ;
 - un fournisseur de LLM ;
-- un système de branches.
+- un système de branches ;
+- l'utilitaire Pro-Spec.
 
 ### 4.3 Source de vérité
 
@@ -139,7 +139,7 @@ Une automatisation SHOULD retirer davantage de complexité qu'elle n'en introdui
 
 ## 5. Artefacts
 
-S.A.W. définit dix artefacts requis.
+Pro-Spec 3 définit neuf artefacts requis et un artefact global conseillé : `HISTORY.md`.
 
 ### 5.1 Artefacts globaux
 
@@ -152,7 +152,7 @@ S.A.W. définit dix artefacts requis.
 | `LEDGER.md` | Quelles décisions durables ont été prises et pourquoi ? |
 | `HISTORY.md` | Quelles opérations significatives ont été effectuées, par qui et quand ? |
 
-Les six artefacts globaux sont requis, y compris `HISTORY.md`, sans exception liée à la taille du projet. La forme du journal SHOULD être indiquée dans `README.md` pour que les exécutants sachent comment consigner les opérations.
+Les cinq premiers artefacts globaux sont requis. `HISTORY.md` est fortement conseillé, mais un très petit projet MAY l'omettre sans perdre sa conformité à Pro-Spec 3. Sa présence et sa forme SHOULD être indiquées dans `README.md` pour que les exécutants sachent où consigner les opérations.
 
 ### 5.2 Artefacts d'un lot
 
@@ -175,7 +175,6 @@ Les six artefacts globaux sont requis, y compris `HISTORY.md`, sans exception li
 ├── STATUS.md
 ├── LEDGER.md
 ├── HISTORY.md
-├── SAW-3.2-SPECIFICATION.md
 └── Specs/
     └── 001-export-pdf/
         ├── SPEC-001.md
@@ -186,9 +185,7 @@ Les six artefacts globaux sont requis, y compris `HISTORY.md`, sans exception li
 
 `CONVERGENCE-001.md` MAY être absent avant la préparation de la fermeture.
 
-`HISTORY.md` MUST être présent à la racine du projet selon la section 14 bis.
-
-Le fichier de la spécification exécutable de la version de S.A.W. appliquée MUST être copié à la racine du projet. Son nom de fichier, sa version et sa révision MUST permettre de l'identifier sans ambiguïté. Ce fichier est une référence normative distribuée avec le projet ; il ne constitue pas un artefact de projet supplémentaire.
+`HISTORY.md` MAY être absent dans un très petit projet selon la section 14 bis.
 
 ### 6.2 Sous-lot
 
@@ -326,11 +323,11 @@ Le choix du format MUST être inscrit dans `RULES.md` lorsqu'il diffère du form
 
 Une validation humaine exige un nom libre.
 
-S.A.W. n'impose ni adresse électronique, ni compte, ni signature cryptographique.
+Pro-Spec n'impose ni adresse électronique, ni compte, ni signature cryptographique.
 
 Plusieurs personnes MAY être indiquées.
 
-S.A.W. ne détermine pas si une personne possède l'autorité requise.
+Pro-Spec ne détermine pas si une personne possède l'autorité requise.
 
 ## 9. Obsolescence et remplacement
 
@@ -431,7 +428,7 @@ Il MUST NOT contenir :
 ### 10.2 Sections minimales
 
 ```markdown
-# S.A.W. project protocol
+# Pro-Spec project protocol
 
 ## Purpose of this file
 ## Protocol reference
@@ -467,7 +464,7 @@ Le ledger ne contient que des décisions durables. Cette lecture évite qu'une d
 
 Une décision obsolète non référencée MAY ne pas être lue intégralement.
 
-`HISTORY.md` ne fait pas partie du bootstrap habituel. Il SHOULD être consulté lorsque la chronologie d'une opération aide à une reprise, une réconciliation ou un audit.
+`HISTORY.md`, lorsqu'il existe, ne fait pas partie du bootstrap habituel. Il SHOULD être consulté lorsque la chronologie d'une opération aide à une reprise, une réconciliation ou un audit. Son absence ne bloque pas ces procédures.
 
 ### 10.4 Renvoi depuis un lot
 
@@ -485,19 +482,9 @@ Les instructions du bootstrap MUST NOT être recopiées dans les fichiers du lot
 
 Depuis `README.md`, un exécutant MUST pouvoir retrouver toutes les règles nécessaires à l'application du protocole dans le projet, sans conversation antérieure ni convention locale non écrite.
 
-La section `Protocol reference` MUST identifier la version et la révision de S.A.W. appliquées. Elle MUST indiquer que le projet suit la méthode S.A.W. décrite dans le fichier de spécification exécutable copié à la racine du projet, et contenir un lien Markdown direct vers ce fichier. Une référence à une version courante non identifiée ne suffit pas.
+La section `Protocol reference` MUST identifier la version et la révision de Pro-Spec appliquées, ainsi que l'emplacement accessible de la référence normative correspondante. Une référence à une version courante non identifiée ne suffit pas.
 
-Une transmission annoncée comme autonome MUST inclure ce fichier de spécification exécutable et les documents nécessaires au bootstrap. La référence normative est donc toujours disponible localement à la racine du projet ; elle ne constitue pas un onzième type d'artefact de projet.
-
-Exemple :
-
-```markdown
-## Protocol reference
-
-This project follows S.A.W. 3.2, as described in [SAW-3.2-SPECIFICATION.md](SAW-3.2-SPECIFICATION.md).
-
-Revision: `3.2.0-2026-09-27`
-```
+Une transmission annoncée comme autonome MUST inclure cette référence normative et les documents nécessaires au bootstrap. La référence MAY être intégrée au `README.md` ou conservée dans un document local accessible depuis celui-ci ; elle ne constitue pas un onzième type d'artefact de projet.
 
 Les procédures applicables MUST être consultées avant leur exécution. Il n'est pas nécessaire de recopier toute la méthode dans chaque artefact.
 
@@ -509,7 +496,7 @@ L'autonomie documentaire suppose les compétences nécessaires au travail demand
 
 `PROJECT.md` définit ce qui est construit et pourquoi.
 
-Lorsque le projet S.A.W. correspond à une sous-fonction d'une Application, ce fichier en définit le périmètre propre et sa contribution à l'ensemble.
+Lorsque le projet Pro-Spec correspond à une sous-fonction d'une Application, ce fichier en définit le périmètre propre et sa contribution à l'ensemble.
 
 Il est très stable.
 
@@ -764,13 +751,25 @@ Une correction typographique sans changement de sens MAY être effectuée.
 
 `HISTORY.md` est le journal chronologique des opérations significatives effectuées sur le projet documentaire. Il décrit les actes exécutés ; `LEDGER.md` conserve les décisions durables et leurs raisons, `STATUS.md` l'état courant, et les autres artefacts leur contenu propre. Une entrée d'historique ne remplace aucune de ces écritures.
 
-`HISTORY.md` MUST exister à la racine du projet, au même titre que les autres artefacts globaux requis. Le format détaillé de la section 14 bis.2 reste facultatif.
+Sa présence est fortement conseillée : même un journal sommaire facilite la compréhension de la chronologie. Un très petit projet MAY l'omettre. Le choix de le tenir manuellement, sous une forme concise ou détaillée, dépend de la taille du projet et des moyens disponibles. L'absence du fichier ou du format détaillé MUST NOT bloquer la planification, la validation ou la fermeture d'un lot.
 
-L'exécutant MUST y consigner les opérations importantes qui modifient le projet documentaire : création et transitions d'un lot ; évolution d'une exigence, règle ou gate ; enregistrement d'une décision ou d'un finding ; validation ; convergence ; reprise ou réconciliation. Des opérations proches MAY être regroupées dans une même entrée intelligible. Les lectures, recherches et commandes sans effet documentaire MAY rester hors du journal. `HISTORY.md` ne constitue pas un journal exhaustif de développement mais un guide de lecture du cycle complet de conception. Les détails sont dans les autres journaux.
+Lorsqu'un historique est tenu, l'exécutant humain ou l'outil SHOULD y consigner les opérations importantes qui modifient le projet documentaire : création et transitions d'un lot ; évolution d'une exigence, règle ou gate ; enregistrement d'une décision ou d'un finding ; validation ; convergence ; reprise ou réconciliation. Des opérations proches MAY être regroupées dans une même entrée intelligible. Les lectures, recherches et commandes sans effet documentaire MAY rester hors du journal. `HISTORY.md` ne constitue pas un journal exhaustif de développement.
 
-### 14 bis.2 Format détaillé
+### 14 bis.2 Forme concise pour une tenue manuelle
 
-Chaque opération MAY être décrite par un événement identifié et des champs explicites, ce qui facilite le filtrage et le rapprochement avec les autres artefacts :
+Une entrée manuelle MAY tenir sur une ligne. Elle SHOULD indiquer au moins la date, l'exécutant, l'opération et les références utiles lorsqu'elles existent :
+
+```text
+2026-09-24T16:42:18+02:00 | Alex | Replaced REQ-001-002 with REQ-001-007 in SPEC-001.md | D-003
+```
+
+Le format de date suit la section 8. Le nom de l'exécutant ne constitue ni une authentification ni l'identité du décideur. La décision et sa raison restent dans `LEDGER.md` lorsqu'elles y sont requises.
+
+Une personne MAY résumer en une entrée plusieurs opérations liées après avoir vérifié leur résultat, par exemple à la fin d'une séance de travail. Elle ne doit pas inventer un horaire d'exécution qu'elle ne connaît pas ; la date de consignation peut alors être distinguée de la période décrite.
+
+### 14 bis.3 Format détaillé conseillé
+
+Quand le projet dispose des moyens nécessaires, chaque opération MAY être décrite par un événement identifié et des champs explicites, ce qui facilite le filtrage et le rapprochement avec les autres artefacts :
 
 ```markdown
 ## EVT-000042 — Requirement replaced
@@ -790,15 +789,15 @@ Reciprocal replacement references were added.
 
 Dans ce format, `Date` suit la section 8 ; `Actor` nomme l'exécutant ; `References` identifie les objets concernés ; `Documents` donne leurs chemins relatifs à la racine du projet ; `Decision` renvoie à une décision du ledger, ou vaut `None` ; `Outcome` indique le résultat constaté, par exemple `Started`, `Applied`, `Interrupted` ou `Reconciled`. `Summary` MAY rester bref.
 
-Les identifiants `EVT-nnnnnn` sont propres au format détaillé. S'ils sont utilisés, ils MUST être uniques et SHOULD être croissants ; une correction ou une réconciliation SHOULD référencer l'événement antérieur concerné.
+Les identifiants `EVT-nnnnnn` sont propres au format détaillé. S'ils sont utilisés, ils MUST être uniques et SHOULD être croissants ; une correction ou une réconciliation SHOULD référencer l'événement antérieur concerné. Un outil MAY utiliser ces champs pour afficher et filtrer le journal, sans imposer ce format aux projets tenus manuellement.
 
-### 14 bis.3 Écriture, correction et reprise
+### 14 bis.4 Écriture, correction et reprise
 
-Le journal est tenu par ajout à la fin du fichier. Les entrées existantes MUST être conservées ; une correction SHOULD être faite par une nouvelle entrée précisant ce qui change. Une opération simple SHOULD être notée après son application. Pour une opération composée, une entrée de début et une entrée de résultat sont conseillées si le niveau de détail choisi le permet. Une tenue manuelle sommaire MAY ne consigner que le résultat vérifié.
+Le journal est tenu par ajout à la fin du fichier. Les entrées existantes SHOULD être conservées ; une correction SHOULD être faite par une nouvelle entrée précisant ce qui change. Une opération simple SHOULD être notée après son application. Pour une opération composée, une entrée de début et une entrée de résultat sont conseillées si le niveau de détail choisi le permet. Une tenue manuelle sommaire MAY ne consigner que le résultat vérifié.
 
 Un événement `Started` sans résultat ultérieur signale une opération à vérifier. Pour toute reprise, l'exécutant MUST comparer les artefacts et appliquer la section 22.8 ; il MUST NOT déduire l'état réel du seul journal. S'il constate une écriture non consignée, il SHOULD ajouter une entrée de réconciliation sans inventer une date ou un acteur historique.
 
-Le journal permet de reconstruire la chronologie des événements consignés, mais ne garantit ni la capture de chaque édition manuelle, ni la restitution exacte des anciennes versions de fichiers. Les archives, historiques de gates, convergences et éventuels mécanismes de versionnement conservent les contenus antérieurs selon leurs propres règles.
+Le journal permet de reconstruire la chronologie des événements consignés, mais ne garantit ni la capture de chaque édition manuelle, ni la restitution exacte des anciennes versions de fichiers. Les archives, historiques de gates, convergences et éventuels mécanismes de versionnement conservent les contenus antérieurs selon leurs propres règles. Un outil SHOULD alimenter `HISTORY.md` lorsqu'il est utilisé par le projet, sans en faire une condition d'utilisation de l'outil ou de conformité du projet.
 
 ## 15. `SPEC-xxx.md`
 
@@ -1309,7 +1308,7 @@ Abandoned
 
 ### 19.3 Table normative des transitions
 
-Cette table définit les transitions autorisées. Toute transition absente de la table MUST NOT être effectuée. Les procédures détaillées référencées complètent ses préconditions et effets ; les scénarios de la section 26 les illustrent.
+Cette table définit les transitions autorisées. Toute transition absente de la table MUST NOT être effectuée. Les procédures détaillées référencées complètent ses préconditions et effets ; les scénarios de la section 27 les illustrent.
 
 Toute transition MUST respecter la séquentialité de la section 20. L'entrée dans un état occupant le créneau actif exige que ce créneau soit libre ou déjà occupé par le même lot, sauf transfert coordonné du parent à son sous-lot.
 
@@ -1375,13 +1374,9 @@ Une convergence existante MUST être conservée.
 
 ## 20. Séquentialité
 
-### 20.1 Règle générale et raison de la séquentialité
+### 20.1 Règle générale
 
-Dans chaque projet S.A.W., les lots sont exécutés les uns après les autres.
-
-Cette séquentialité résulte du workflow documentaire : dans le flux nominal, un lot ne libère le passage vers le lot suivant qu'après sa fermeture. Cette fermeture impose l'examen des findings, l'évaluation de toutes les gates applicables, la convergence et l'acceptation humaine requise. La séquentialité protège ainsi la continuité de l'intention, des validations et de l'état connu avant de poursuivre.
-
-Les sorties `Cancelled` et `Obsolete` peuvent également libérer le créneau selon les transitions autorisées, mais elles constituent des traitements exceptionnels documentés. Elles MUST NOT être employées pour contourner une gate ou simuler une fermeture nominale.
+Dans chaque projet Pro-Spec, les lots sont exécutés les uns après les autres.
 
 Un seul lot MAY occuper le créneau de travail actif de ce projet.
 
@@ -1427,35 +1422,23 @@ Le créneau actif, le blocage et les transitions des sections 19 et 20 sont prop
 
 ## 20 bis. Application et parallélisme entre projets
 
-### 20 bis.1 Définition et intention architecturale
+### 20 bis.1 Définition
 
-Le terme anglais `Application` désigne un ensemble de projets S.A.W. qui contribuent à une même application. Ces projets MAY correspondre à une fonctionnalité, à un domaine entier tel que la saisie de factures ou les impressions, ou à une partie de fonctionnalité. Ils n'ont pas besoin d'être des projets organisationnels ni des bases de code distincts. Un projet MAY aussi rester autonome, sans appartenir à une Application documentée.
+Le terme anglais `Application` désigne un ensemble de projets Pro-Spec qui contribuent à une même application. Ces projets MAY correspondre à ses sous-fonctions ; ils n'ont pas besoin d'être des projets organisationnels ou des bases de code distincts. Un projet MAY aussi rester autonome, sans appartenir à une Application documentée.
 
-La simple présence d'un répertoire parent nommé Application ne rend pas le parallélisme valide. Lorsqu'une Application sert à organiser des projets exécutables en parallèle, elle MUST exprimer l'intention, les responsabilités et la cohérence de ce découpage dans ses propres artefacts Markdown.
+Une Application MAY être décrite par deux fichiers Markdown placés au-dessus des racines des projets :
 
-Une Application structurée MUST être placée au-dessus des racines de ses projets et contenir :
+- `APPLICATION.md` décrit la nature, la finalité et le périmètre de l'Application ;
+- `PROJECTS.md` nomme et décrit les projets qui la constituent, ainsi que le chemin de chacun.
 
-- `README.md`, bootstrap de travail à l'échelle de l'Application ;
-- `APPLICATION.md`, nature, finalité et périmètre de l'Application ;
-- `RULES.md`, règles globales applicables aux projets membres ;
-- `STATUS.md`, suivi global de réalisation des projets ;
-- `PROJECTS.md`, inventaire, périmètres et chemins des projets membres ;
-- `LEDGER.md`, décisions architecturales et de coordination durables ;
-- `HISTORY.md`, journal des opérations significatives de coordination.
-
-`PROJECTS.md` MUST recenser tous les projets membres de l'Application. Chaque nom de projet MUST être distinct dans cette liste et chaque chemin MUST permettre d'identifier sans ambiguïté la racine du projet correspondant. Chaque entrée MUST préciser son périmètre, ses responsabilités et ses dépendances connues.
+Lorsque `PROJECTS.md` est utilisé, il MUST recenser tous les projets membres de l'Application. Chaque nom de projet MUST être distinct dans cette liste et chaque chemin MUST permettre d'identifier sans ambiguïté la racine du projet correspondant. Une description courte SHOULD préciser le périmètre de chacun.
 
 Exemple d'organisation :
 
 ```text
 my-application/
-├── README.md
 ├── APPLICATION.md
-├── RULES.md
-├── STATUS.md
 ├── PROJECTS.md
-├── LEDGER.md
-├── HISTORY.md
 ├── api/
 │   ├── README.md
 │   ├── PROJECT.md
@@ -1475,34 +1458,17 @@ Dans cet exemple, `PROJECTS.md` pourrait contenir :
 | Client | client/ | User interface |
 ```
 
-Le `README.md` de l'Application répond à la même question qu'un README de projet : comment travailler dans le périmètre concerné. Il MUST diriger vers `APPLICATION.md`, `RULES.md`, les décisions pertinentes de `LEDGER.md`, `STATUS.md`, puis vers le projet concerné. Le `README.md` de chaque projet membre MUST commencer par demander la lecture du `README.md` de l'Application avant son bootstrap local.
+`APPLICATION.md` et `PROJECTS.md` ne sont pas des artefacts de projet supplémentaires. Ils ne remplacent ni le `README.md` d'un projet, ni ses règles, décisions, validations ou états. Le bootstrap et les critères de conformité restent applicables à chaque projet séparément.
 
-Le `RULES.md` de chaque projet membre MUST commencer par demander la lecture et l'application du `RULES.md` de l'Application. Il ne répète pas les règles globales ; il ne contient que les règles locales ou les précisions et exceptions explicitement référencées. Chaque `SPEC` d'un projet membre MUST commencer par demander la lecture du `README.md` de l'Application et du `README.md` de son projet.
+### 20 bis.2 Exécution simultanée
 
-Le `STATUS.md` de l'Application est une vue de coordination des projets et de leurs dépendances ; il MUST identifier sa date ou son origine de mise à jour. Il ne fait pas autorité sur l'état d'un lot : le `STATUS.md` de chaque projet reste seul autoritaire pour ses lots.
-
-L'Application ne possède pas de lots. Une gate, une convergence ou un résultat de livraison réellement transversal MUST être gouverné par un projet d'intégration distinct, membre de l'Application, avec ses propres artefacts et gates.
-
-### 20 bis.2 Contrat de parallélisme et exécution simultanée
-
-Le découpage d'une Application en plusieurs projets S.A.W. permet d'exécuter simultanément des lots appartenant à des projets différents uniquement lorsqu'une autorité architecturale identifiée est en mesure de garantir que ces projets peuvent progresser sans risque incompatible. Cette garantie MUST être inscrite dans une décision du `LEDGER.md` de l'Application avant le démarrage parallèle.
-
-Cette décision, appelée contrat de parallélisme, MUST identifier :
-
-- les périmètres et responsabilités de chaque projet concerné ;
-- leurs dépendances et interfaces ;
-- les ressources, fichiers ou zones de produit partagés ;
-- le propriétaire de chaque zone modifiable ;
-- la justification de l'indépendance permettant l'exécution simultanée ;
-- le mécanisme de coordination et de résolution de conflit lorsqu'une écriture partagée reste nécessaire.
-
-Chacun possède ses propres lots, identifiants, `STATUS.md`, décisions et créneau actif. L'unicité des identifiants s'apprécie dans chaque projet ; une référence entre projets SHOULD donc préciser le nom du projet source et celui du projet cible.
+Le découpage d'une Application en plusieurs projets Pro-Spec permet d'exécuter simultanément des lots appartenant à des projets différents. Chacun possède ses propres lots, identifiants, `STATUS.md`, décisions et créneau actif. L'unicité des identifiants s'apprécie dans chaque projet ; une référence entre projets SHOULD donc préciser le nom du projet source et celui du projet cible.
 
 La présence d'un lot `In-progress`, `Blocked` ou `Ready-to-close` dans un projet n'occupe pas le créneau d'un autre projet. Un blocage dans un projet ne bloque pas automatiquement les lots des autres projets. Dans chacun d'eux, la règle d'un seul lot actif des sections 19 et 20 continue de s'appliquer.
 
-Les dépendances, décisions et ressources partagées qui touchent plusieurs projets MUST être rendues explicites dans le contrat de parallélisme et référencées par les artefacts des projets concernés. Les documents de l'Application ne font pas autorité sur l'état d'un lot ou sur une décision propre à un projet.
+Les dépendances, décisions et ressources partagées qui touchent plusieurs projets SHOULD être rendues explicites dans les artefacts des projets concernés. Les documents de l'Application MAY aider à les repérer, mais ne font pas autorité sur l'état d'un lot ou sur une décision propre à un projet.
 
-L'organisation SHOULD éviter que plusieurs projets modifient simultanément les mêmes fichiers de produit. Si ce partage est nécessaire, les organisateurs MUST définir et appliquer un mécanisme de coordination des écritures et de résolution des conflits avant de lancer ces travaux en parallèle. Ils peuvent, par exemple, utiliser Git, comparer les différences et fusionner les modifications, ou organiser les écritures dans le temps. Ce besoin résulte de leur découpage et de leurs ressources partagées ; le choix du mécanisme leur appartient. S.A.W. n'impose ni Git, ni autre outil de coordination, ni exécution simultanée effective.
+L'organisation SHOULD éviter que plusieurs projets modifient simultanément les mêmes fichiers de produit. Si ce partage est nécessaire, les organisateurs MUST définir et appliquer un mécanisme de coordination des écritures et de résolution des conflits avant de lancer ces travaux en parallèle. Ils peuvent, par exemple, utiliser Git, comparer les différences et fusionner les modifications, ou organiser les écritures dans le temps. Ce besoin résulte de leur découpage et de leurs ressources partagées ; le choix du mécanisme leur appartient. Pro-Spec n'impose ni Git, ni autre outil de coordination, ni exécution simultanée effective.
 
 ## 21. Création d'un lot
 
@@ -1610,7 +1576,7 @@ Pour une opération comportant plusieurs écritures :
 2. les contenus et résultats antérieurs à conserver MUST être préservés avant leur remplacement ou leur réinitialisation ;
 3. les artefacts gouvernés, les références et les validations affectées MUST être mis à jour ;
 4. leur cohérence MUST être vérifiée ;
-5. le changement d'état constatant l'achèvement de l'opération MUST être écrit dans `STATUS` en dernier parmi les artefacts d'état et de contenu ; l'entrée de résultat dans `HISTORY.md` suit cette vérification.
+5. le changement d'état constatant l'achèvement de l'opération MUST être écrit dans `STATUS` en dernier parmi les artefacts d'état et de contenu ; lorsqu'un journal est tenu, son entrée de résultat suit cette vérification.
 
 Un état autorisant la reprise du travail, tel que `In-progress`, est enregistré après les préparations documentaires requises et avant les modifications du résultat. Les transferts parent/sous-lot suivent l'ordre particulier de la section 20.3.
 
@@ -1620,7 +1586,7 @@ Si une décision requise est absente, ambiguë ou incompatible avec les autres a
 
 `STATUS` reste l'autorité sur l'état enregistré. Une incohérence avec une convergence ou une décision MUST NOT être résolue en effaçant une validation, une décision ou une fermeture antérieure. La réparation MUST préserver les traces existantes et respecter les transitions autorisées.
 
-Cette procédure exige une réconciliation manuelle des informations, sans imposer de mécanisme transactionnel ni d'outil. Les événements correspondants SHOULD être consignés dans `HISTORY.md` selon la section 14 bis ; le journal ne remplace pas la comparaison des artefacts.
+Cette procédure exige une réconciliation manuelle des informations, sans imposer de mécanisme transactionnel ni d'outil. Lorsqu'un journal est tenu, les événements correspondants SHOULD y être consignés selon la section 14 bis ; le journal ne remplace pas la comparaison des artefacts.
 
 ## 23. Procédure manuelle de fermeture
 
@@ -1695,11 +1661,75 @@ Une automatisation MAY préparer ces opérations.
 
 Elle MUST demander la décision humaine avant de les rendre effectives.
 
-## 26. Scénarios de référence
+## 26. Outil Pro-Spec optionnel
+
+### 26.1 Principe de conformité
+
+Un outil conforme MUST automatiser le protocole sans le modifier.
+
+L'outil reste facultatif.
+
+Son absence MUST NOT retirer une capacité définie par la méthode.
+
+L'utilitaire Pro-Spec officiel MUST être :
+
+- compilé ;
+- développé en C#/.NET ;
+- distribué avec ses sources ouvertes ;
+- utilisable sans runtime Python.
+
+Il MUST NOT :
+
+- introduire une source de vérité propriétaire ;
+- cacher une règle nécessaire ;
+- fermer un lot sans humain ;
+- satisfaire une gate HUMAN ;
+- contourner une gate ;
+- modifier une règle pour faire passer une gate ;
+- rendre le projet inutilisable sans l'outil.
+
+### 26.2 Fonctions envisageables
+
+Le périmètre fonctionnel de l'outil n'est pas arrêté par la présente spécification.
+
+Il sera défini après la réalisation et l'analyse du dossier test de Pro-Spec 3.
+
+L'outil visera en priorité :
+
+- les initialisations ;
+- les opérations composées de plusieurs modifications manuelles répétitives ou fastidieuses.
+
+La liste suivante est illustrative. Elle ne constitue pas encore la spécification fonctionnelle de l'outil.
+
+Un outil MAY :
+
+- initialiser les artefacts globaux ;
+- créer le squelette d'un lot ;
+- attribuer le prochain identifiant disponible ;
+- vérifier les références ;
+- exécuter des gates AUTO ;
+- préparer des évaluations LLM ;
+- afficher le bootstrap ;
+- préparer la convergence ;
+- guider la fermeture ;
+- mettre à jour les fichiers après validation humaine ;
+- alimenter `HISTORY.md` lorsqu'il est tenu ;
+- afficher et filtrer les informations disponibles dans `HISTORY.md` lorsqu'il existe.
+
+### 26.3 Transparence
+
+Avant un appel LLM, l'outil SHOULD afficher :
+
+- le modèle ;
+- les fichiers inclus ;
+- les instructions ;
+- les fichiers susceptibles d'être modifiés.
+
+## 27. Scénarios de référence
 
 Ces scénarios illustrent la table normative de la section 19.3 et les procédures associées. Leur présentation abrégée ne dispense pas des contrôles de validité, de traçabilité et de cohérence exigés par le protocole.
 
-### 26.1 Lot nominal
+### 27.1 Lot nominal
 
 ```text
 1. Créer SPEC, FINDINGS et GATES.
@@ -1718,7 +1748,7 @@ Ces scénarios illustrent la table normative de la section 19.3 et les procédur
 
 Aucune entrée de fermeture dans le ledger n'est obligatoire.
 
-### 26.2 Finding produisant une règle
+### 27.2 Finding produisant une règle
 
 ```text
 1. Créer F-001-010.
@@ -1732,7 +1762,7 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 9. Appliquer aux lots concernés les suites décidées, notamment la revalidation des gates affectées.
 ```
 
-### 26.3 Fermeture partielle
+### 27.3 Fermeture partielle
 
 ```text
 1. Toutes les gates actives sont PASS encore valables ou N/A autorisé.
@@ -1744,7 +1774,7 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 7. L'humain ferme le lot.
 ```
 
-### 26.4 Sous-lot
+### 27.4 Sous-lot
 
 ```text
 1. LOT-001 est In-progress.
@@ -1755,7 +1785,7 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 6. Après examen du résultat du sous-lot et de son impact sur les validations du parent, l'humain replace LOT-001 en In-progress si le créneau est libre.
 ```
 
-### 26.5 Lot remplacé
+### 27.5 Lot remplacé
 
 ```text
 1. L'humain décide le remplacement.
@@ -1767,7 +1797,7 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 7. STATUS inscrit l'ancien lot Obsolete et le nouvel état documentaire du remplacement.
 ```
 
-### 26.6 Reprise d'un lot fermé
+### 27.6 Reprise d'un lot fermé
 
 ```text
 1. Lire l'ancienne convergence.
@@ -1782,7 +1812,7 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 10. Obtenir une nouvelle fermeture humaine.
 ```
 
-### 26.7 Réactivation sans modification
+### 27.7 Réactivation sans modification
 
 ```text
 1. LOT-001 est Abandoned.
@@ -1793,24 +1823,24 @@ Aucune entrée de fermeture dans le ledger n'est obligatoire.
 6. LOT-001 redevient Closed.
 ```
 
-## 27. Critères de conformité d'un projet
+## 28. Critères de conformité d'un projet
 
-La conformité à S.A.W. 3.2 exige le respect de toutes les obligations normatives applicables.
+La conformité à Pro-Spec 3 exige le respect de toutes les obligations normatives applicables.
 
 La liste suivante constitue un contrôle synthétique et ne remplace pas ces obligations :
 
-- les dix types d'artefacts requis sont définis ;
-- les six artefacts globaux requis existent, y compris `HISTORY.md` ;
+- les neuf types d'artefacts requis sont définis ;
+- les cinq artefacts globaux requis existent ;
+- `HISTORY.md` est conseillé ; son absence dans un très petit projet ne constitue pas une non-conformité ;
 - chaque lot reconnu possède une spec, des findings et des gates ;
 - chaque lot fermé possède une convergence ;
 - le bootstrap est explicite ;
-- le fichier de spécification exécutable de la méthode appliquée est copié à la racine du projet ;
-- la section `Protocol reference` du `README.md` identifie la version et la révision du protocole, indique que le projet suit la méthode décrite dans ce fichier et y mène par un lien Markdown direct ;
+- la version et la révision du protocole sont identifiées et sa référence normative est accessible depuis le point d'entrée ;
 - une transmission autonome contient les références et les informations nécessaires à la reprise ;
 - les identifiants sont uniques ;
 - les informations obsolètes sont conservées ;
 - les décisions durables sont dans le ledger ;
-- les opérations significatives sont consignées par ajout dans `HISTORY.md` selon le niveau de détail choisi ;
+- si `HISTORY.md` est tenu, les opérations significatives y sont consignées par ajout selon le niveau de détail choisi ;
 - les validations humaines sont identifiées et datées ;
 - les résultats évalués et acceptés sont identifiables et les validations restent applicables ;
 - seules les gates actives participent au verdict courant, avec des décisions `N/A` applicables lorsqu'elles sont utilisées ;
@@ -1818,30 +1848,29 @@ La liste suivante constitue un contrôle synthétique et ne remplace pas ces obl
 - la portée des évolutions de règles et leurs effets sur l'existant sont documentés ;
 - aucun lot n'est fermé automatiquement ;
 - les transitions autorisées et la séquentialité sont respectées dans chaque projet, y compris lorsqu'il appartient à une Application ;
-- toute Application qui autorise le parallélisme possède ses artefacts requis, un inventaire exhaustif de ses projets et un contrat de parallélisme approuvé ;
-- le statut global d'une Application est identifiable comme une vue de coordination et ne contredit pas les statuts autoritaires des projets ;
 - les opérations documentaires interrompues sont réconciliées avant de poursuivre le travail qui en dépend ;
-- le projet reste utilisable sans dépendance à un agent, à un IDE ou à un système de gestion de versions.
+- le projet reste utilisable sans outil Pro-Spec.
 
-## 28. Hors périmètre de cette version
+## 29. Hors périmètre de cette version
 
 Cette version ne définit pas :
 
-- l'exécution parallèle de lots au sein d'un même projet S.A.W. ;
+- l'exécution parallèle de lots au sein d'un même projet Pro-Spec ;
 - la gestion des droits et autorités humaines ;
 - l'authentification ;
 - la signature cryptographique ;
 - un système de gestion de versions ;
 - un fournisseur de LLM ;
+- une architecture logicielle de l'utilitaire ;
 - une interface graphique ;
 - un format propriétaire.
 
-## 29. Résumé du protocole
+## 30. Résumé du protocole
 
 ```text
 Lire avant d'agir.
 Définir l'intention et les gates.
-Exécuter un seul lot à la fois par projet S.A.W.
+Exécuter un seul lot à la fois par projet Pro-Spec.
 Conserver les findings.
 Historiser les changements de sens.
 Valider selon la nature de chaque gate.
@@ -1849,7 +1878,7 @@ Identifier le résultat évalué et réexaminer les validations après modificat
 Comparer l'intention au résultat.
 Faire décider l'humain.
 Capitaliser les décisions durables.
-Tenir un historique proportionné aux moyens du projet.
+Tenir si possible un historique proportionné aux moyens du projet.
 Conserver les informations nécessaires à la reprise.
 Réconcilier les écritures interrompues avant de poursuivre.
 Ne rien détruire silencieusement.

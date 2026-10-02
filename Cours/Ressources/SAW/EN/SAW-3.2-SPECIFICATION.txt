@@ -1,4 +1,4 @@
-# S.A.W. 3.2 — SDD Another Way
+﻿# S.A.W. 3.2 — SDD Another Way
 
 ## Normative specification of the protocol
 
