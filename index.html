@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S.A.W. (SDD Another Way) 3.2</title>
+  <script>
+    const preferredLanguage = navigator.languages?.[0] || navigator.language || "en-US";
+    const isFrench = preferredLanguage.toLowerCase().split("-")[0] === "fr";
+    const destination = isFrench
+      ? "SAW-FR/SAW-3.2-PRESENTATION.html"
+      : "SAW-EN/SAW-3.2-PRESENTATION.html";
+
+    window.location.replace(destination + window.location.search + window.location.hash);
+  </script>
+</head>
+<body>
+  <h1>S.A.W. (SDD Another Way) 3.2</h1>
+  <p>Select your language if you are not redirected automatically:</p>
+  <ul>
+    <li><a href="SAW-FR/SAW-3.2-PRESENTATION.html" lang="fr">Français</a></li>
+    <li><a href="SAW-EN/SAW-3.2-PRESENTATION.html" lang="en-US">English (US)</a></li>
+  </ul>
+</body>
+</html>
