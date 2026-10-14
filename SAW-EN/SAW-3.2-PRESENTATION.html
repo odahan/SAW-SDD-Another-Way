@@ -116,6 +116,13 @@
       .process li::before { left: -2.6rem; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    .manual-cta { margin-block: 1.5rem; }
+    .manual-button, .contact-button { display: inline-block; border: 1px solid var(--cyan); border-radius: 10px; padding: .75rem 1rem; background: #173543; color: var(--text); font: inherit; font-weight: 750; cursor: pointer; text-decoration: none; }
+    .manual-button { background: var(--cyan); color: #080d14; }
+    .manual-button:hover { background: #bbf9fa; color: #080d14; }
+    .contact-button:hover { background: #234b5b; }
+    .contact-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    .contact-status { display: block; min-height: 1.6em; margin-top: .7rem; color: var(--green); overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
@@ -128,6 +135,8 @@
       <a href="#vision">The Idea</a>
       <a href="#cycle">The Cycle</a>
       <a href="#lot">A Lot in Practice</a>
+      <a href="SAW-3.2-MANUAL.html">Practical guide</a>
+      <a href="#contact">Contact</a>
       <a class="language-link" href="../SAW-FR/SAW-3.2-PRESENTATION.html" hreflang="fr" lang="fr">Version FR</a>
     </nav>
   </header>
@@ -138,6 +147,7 @@
         <p class="eyebrow">Spec-Driven Development · AI-centric</p>
         <h1>SDD, another way</h1>
         <p class="lead"><strong class="wordmark">S.A.W. (SDD Another Way)</strong> 3.2 organizes development around documented intent, one lot of work after another, and explicit validation. An LLM can do the work and keep the documents up to date; people make the decisions reserved for them.</p>
+        <div class="manual-cta"><a class="manual-button" href="SAW-3.2-MANUAL.html">Practical guide — get started with SAW</a></div>
         <p class="support">The method is rooted in <em>Spec-Driven Development</em> (SDD): starting from a shared specification to connect requirements, implementation, and validation. It stems from Pro-Spec 3, a method created and refined over dozens of implementations with AI.</p>
         <p class="support">A <strong>project</strong> can cover an entire application, a major feature, or even a complex visual control. Multiple projects can belong to an <strong>Application</strong> placed above them, with its general rules and coordination documents. They can advance in parallel if an explicit architectural decision defines their independence and the management of their shared resources; each project maintains only one active lot at a time.</p>
         <div class="pill-row" aria-label="Features">
@@ -253,11 +263,32 @@
         <p><strong>Full Specification:</strong> <a href="SAW-3.2-SPECIFICATION.txt">Read the S.A.W. (SDD Another Way) 3.2 Normative Specification</a>.</p>
       </div>
     </section>
+    <section id="contact" class="wrap" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact the author</h2>
+      <p>Have a question about SAW or feedback on the method? Contact Olivier Dahan by email.</p>
+      <button id="copy-contact" class="contact-button" type="button">Copy email address</button>
+      <span id="contact-status" class="contact-status" role="status" aria-live="polite"></span>
+      <noscript><p>To contact the author: odahan [at] e-naxos [dot] com.</p></noscript>
+    </section>
   </main>
 
   <footer class="wrap">
     <p>S.A.W. (SDD Another Way) 3.2</p>
     <p>Executive Summary · the normative specification prevails for execution.</p>
   </footer>
+  <script>
+document.getElementById('copy-contact').addEventListener('click', async () => {
+  const address = ['odahan', ['e-naxos', 'com'].join('.')].join('@');
+  const status = document.getElementById('contact-status');
+  const french = document.documentElement.lang === 'fr';
+  try {
+    if (!navigator.clipboard || !window.isSecureContext) throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(address);
+    status.textContent = french ? 'Adresse e-mail copiée.' : 'Email address copied.';
+  } catch {
+    status.textContent = (french ? 'Copiez cette adresse : ' : 'Copy this address: ') + address;
+  }
+});
+  </script>
 </body>
 </html>

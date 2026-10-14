@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Appliquer SAW 3.2 pas à pas : préparer le projet, découper les lots, réaliser, valider et fermer, puis organiser une Application.">
+  <title>S.A.W. 3.2 — Guide pratique</title>
+  <style>
+    :root { color-scheme: dark; --bg: #080d14; --surface: #101b29; --line: #294057; --text: #ecf4fb; --muted: #abc0d3; --cyan: #7de1e5; --gold: #f3cf83; --green: #a9dfb0; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+    body { margin: 0; background: radial-gradient(circle at 80% 0, #19314a 0, transparent 35rem), var(--bg); color: var(--text); font: 16px/1.7 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    a { color: var(--cyan); text-underline-offset: .2em; }
+    a:hover { color: #bbf9fa; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+    h1, h2, h3 { line-height: 1.2; letter-spacing: -.025em; }
+    h1 { font-size: clamp(2.5rem, 6vw, 4.4rem); max-width: 20ch; margin: .5rem 0 1.2rem; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 1rem; }
+    h3 { font-size: 1.12rem; margin: 1.4rem 0 .5rem; }
+    p { margin: .6rem 0 1rem; color: var(--muted); }
+    strong { color: var(--text); }
+    .wrap { width: min(1200px, calc(100% - 3rem)); margin: auto; }
+    .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.4rem 0; border-bottom: 1px solid var(--line); }
+    .brand { font-weight: 850; text-decoration: none; color: var(--text); }
+    .topbar nav { display: flex; flex-wrap: wrap; gap: 1.4rem; font-size: .92rem; }
+    .hero { padding: 4rem 0 2.5rem; }
+    .eyebrow { font-size: .8rem; color: var(--cyan); letter-spacing: .14em; text-transform: uppercase; font-weight: 800; }
+    .lead { font-size: 1.18rem; max-width: 75ch; color: #d1e1ef; }
+    .hero > p { max-width: 80ch; }
+    .hero .note { max-width: 80ch; }
+    .layout { display: grid; grid-template-columns: 245px minmax(0, 1fr); gap: 3rem; align-items: start; }
+    .toc { position: sticky; top: 1.5rem; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 1.2rem; max-height: calc(100vh - 3rem); overflow: auto; }
+    .toc h2 { font-size: 1rem; }
+    .toc ol { list-style: none; padding: 0; margin: 0; }
+    .toc li { margin: .6rem 0; }
+    .toc a { font-size: .88rem; text-decoration: none; color: var(--muted); display: block; }
+    .toc a:hover { color: var(--cyan); }
+    .content { min-width: 0; }
+    section { border-top: 1px solid var(--line); padding: 2.8rem 0; }
+    section:first-child { border-top: 0; padding-top: .5rem; }
+    .step-label { color: var(--gold); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; }
+    .example, .check, .note, .prompt { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 1.15rem 1.3rem; margin: 1.2rem 0; }
+    .example { border-left: 3px solid var(--gold); }
+    .check { border-left: 3px solid var(--green); }
+    .note { border-left: 3px solid var(--cyan); }
+    .example h3, .check h3, .note h3, .prompt h3 { margin-top: 0; }
+    .example p:last-child, .note p:last-child, .check p:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 1.4rem; color: var(--muted); }
+    li { margin: .4rem 0; }
+    code { font: .88em ui-monospace, SFMono-Regular, Consolas, monospace; color: #d8f5f3; overflow-wrap: anywhere; }
+    p code, li code, td code { background: #0b1825; padding: .15rem .3rem; border-radius: 4px; }
+    pre { background: #0b1825; border: 1px solid var(--line); border-radius: 10px; padding: 1rem; white-space: pre-wrap; overflow-wrap: anywhere; margin: .8rem 0; font-size: .9rem; line-height: 1.6; }
+    button { border: 1px solid #558594; border-radius: 8px; padding: .5rem .8rem; background: #173543; color: var(--text); font: inherit; font-size: .85rem; font-weight: 650; cursor: pointer; }
+    button:hover { background: #234b5b; }
+    .copy-feedback { display: block; min-height: 1.5em; font-size: .85rem; color: var(--green); }
+    details { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 1rem 1.2rem; margin: .8rem 0; }
+    summary { cursor: pointer; font-weight: 700; color: var(--text); }
+    details[open] summary { margin-bottom: 1rem; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .94rem; }
+    th, td { text-align: left; vertical-align: top; padding: .8rem; border-bottom: 1px solid var(--line); }
+    th { color: var(--cyan); } td { color: var(--muted); }
+    footer { border-top: 1px solid var(--line); padding: 2rem 0; margin-top: 2rem; font-size: .88rem; }
+    .skip { position: absolute; left: 1rem; top: -5rem; background: var(--surface); padding: .7rem; z-index: 10; }
+    .skip:focus { top: 1rem; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; gap: 1.5rem; } .toc { position: static; max-height: none; } .toc ol { columns: 2; } .toc li { break-inside: avoid; } }
+    @media (max-width: 560px) { .wrap { width: calc(100% - 1.5rem); } .hero { padding-top: 2.5rem; } .toc ol { columns: 1; } .topbar { align-items: flex-start; flex-direction: column; } section { padding: 2rem 0; } .example, .check, .note, .prompt { padding: 1rem; } th, td { padding: .6rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print { :root { color-scheme: light; --bg: #fff; --surface: #fff; --line: #bbb; --text: #111; --muted: #333; --cyan: #135466; --gold: #785500; --green: #245b30; } body { background: #fff; font-size: 10pt; } .wrap { width: 100%; } .layout { display: block; } .toc, .topbar nav, .copy-feedback, .skip, button { display: none; } .hero { padding: 1rem 0; } h1 { font-size: 26pt; } h2 { font-size: 18pt; } section { padding: 1.3rem 0; } h2, h3, summary { break-after: avoid; } pre { background: #f5f5f5; } code { color: #111; } p code, li code, td code { background: #eee; } a { color: #135466; } .topbar { padding: .5rem 0; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#start">Aller au guide</a>
+  <header class="topbar wrap">
+    <a class="brand" href="SAW-3.2-PRESENTATION.html">S.A.W. · 3.2</a>
+    <nav aria-label="Navigation du guide"><a href="SAW-3.2-PRESENTATION.html">Présentation de SAW</a><a href="#contents">Sommaire</a><a href="#faq">FAQ</a></nav>
+  </header>
+  <main class="wrap">
+    <div class="hero">
+      <p class="eyebrow">Guide pratique · Spec-Driven Development</p>
+      <h1>Mettre SAW en pratique</h1>
+      <p class="lead">De votre première idée au premier lot accepté : un guide pas à pas pour S.A.W. 3.2.</p>
+      <p>Vous pouvez confier au LLM la réalisation et la tenue des fichiers. Vous gardez la définition du besoin, les arbitrages et l’acceptation. Vous pouvez aussi appliquer le protocole entièrement à la main.</p>
+      <div class="note"><h3>Comment lire ce guide</h3><p>Suivez les étapes 1 à 10 pour un premier projet. La préparation du découpage avec un LLM est optionnelle. Consultez ensuite les situations particulières et la partie Application si votre périmètre le nécessite. Les modèles sont des exemples à adapter ; la spécification exécutable reste la référence pour l’exécution.</p></div>
+    </div>
+    <div class="layout">
+      <aside class="toc" id="contents" aria-label="Sommaire">
+        <h2>Votre parcours</h2>
+        <ol>
+          <li><a href="#start">1. Préparer le point de départ</a></li>
+          <li><a href="#product">2. Décrire le produit</a></li>
+          <li><a href="#setup">3. Installer le cadre documentaire</a></li>
+          <li><a href="#planning">4. Découper le travail</a></li>
+          <li><a href="#lot">5. Préparer le premier lot</a></li>
+          <li><a href="#run">6. Lancer et réaliser</a></li>
+          <li><a href="#validate">7. Évaluer les gates</a></li>
+          <li><a href="#close">8. Accepter et fermer</a></li>
+          <li><a href="#resume">9. Reprendre le travail</a></li>
+          <li><a href="#next">10. Passer au lot suivant</a></li>
+          <li><a href="#special">Situations particulières</a></li>
+          <li><a href="#application">Avancé : l’Application</a></li>
+          <li><a href="#reference">Aide-mémoire et modèles</a></li>
+          <li><a href="#faq">Questions fréquentes</a></li>
+        </ol>
+      </aside>
+      <div class="content">
+        <section id="start" aria-labelledby="start-title">
+          <p class="step-label">Étape 1</p><h2 id="start-title">Préparer votre point de départ</h2>
+          <p>Partez d’un besoin concret. Un projet SAW peut couvrir une application entière, une fonctionnalité ou un autre périmètre identifiable.</p>
+          <p>Récupérez la <a href="SAW-3.2-SPECIFICATION-EXEC.txt" download>spécification exécutable</a> et fournissez-la au LLM avant de lui demander de préparer les documents. La version Markdown distribuée avec SAW porte le nom <code>SAW-3.2-SPECIFICATION-EXEC.md</code> ; la version texte téléchargeable contient le même Markdown et peut être enregistrée sous ce nom.</p>
+          <ol><li>Choisissez un dossier accessible aux personnes et au LLM qui interviendront.</li><li>Rassemblez vos spécifications, maquettes et contraintes connues. Signalez les questions ouvertes.</li><li>Identifiez la personne qui décide et accepte le résultat. Aucun compte ni système de signature particulier n’est imposé.</li><li>Choisissez vos outils habituels. SAW repose sur des fichiers Markdown sans imposer Git, un IDE ou un fournisseur de LLM.</li></ol>
+          <div class="example"><h3>Notre exemple suivi</h3><p>Une petite liste de tâches personnelle : ajouter des tâches, les voir, les terminer et les retrouver à la prochaine session. Les comptes, le partage et la synchronisation sont hors périmètre.</p></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Le besoin, le périmètre initial et la personne qui accepte sont identifiés. La réalisation n’a pas encore besoin de commencer.</p></div>
+        </section>
+        <section id="product" aria-labelledby="product-title">
+          <p class="step-label">Étape 2</p><h2 id="product-title">Décrire le produit et ses contraintes</h2>
+          <p><code>PROJECT.md</code> décrit le produit et sa raison d’être. <code>RULES.md</code> contient les contraintes actives.</p>
+          <ol><li>Écrivez le problème, les utilisateurs, le périmètre et le hors périmètre.</li><li>Décrivez les caractéristiques fonctionnelles stables et les termes utiles.</li><li>Précisez les contraintes réelles : plateforme, architecture, stockage, sécurité, tests et conventions. N’inventez pas une contrainte pour remplir un modèle.</li><li>Relisez les propositions du LLM et corrigez-les avant de les utiliser comme cadre du projet.</li></ol>
+          <p>Les règles initiales n’exigent pas de décision au ledger. Après initialisation, leur ajout ou leur modification demande une décision humaine consignée, avec sa portée et ses conséquences.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>Les données doivent rester sur l’appareil de l’utilisateur. La persistance appartient au produit final ; elle peut être réalisée dans un lot ultérieur.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-1">À partir de mes spécifications, prépare PROJECT.md et les règles initiales de RULES.md selon SAW 3.2. Sépare le périmètre du produit des contraintes techniques. Signale tes hypothèses et les questions nécessitant ma décision. Ne commence pas la réalisation.</code></pre><button type="button" data-copy="prompt-1">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Le produit et ses exclusions sont compréhensibles. Les contraintes sont explicites et vérifiables.</p></div>
+        </section>
+        <section id="setup" aria-labelledby="setup-title">
+          <p class="step-label">Étape 3</p><h2 id="setup-title">Installer le cadre documentaire</h2>
+          <p>Copiez à la racine documentaire la spécification <strong>exécutable</strong> de SAW 3.2, dans la langue choisie. Le README doit identifier son fichier, sa version et sa révision, avec un lien direct.</p>
+          <p>Créez les six fichiers globaux requis. Les noms normatifs restent en anglais. <code>HISTORY.md</code> est obligatoire dans cette version exécutable, même pour un petit projet.</p>
+          <pre><code>my-project/
+  SAW-3.2-SPECIFICATION-EXEC.md
+  README.md
+  PROJECT.md
+  RULES.md
+  STATUS.md
+  LEDGER.md
+  HISTORY.md
+  Specs/
+    001-create-list/
+      SPEC-001.md
+      FINDINGS-001.md
+      GATES-001.md
+      CONVERGENCE-001.md  ← préparé à la fermeture</code></pre>
+          <p>README est le point d’entrée universel. STATUS fait autorité sur l’état courant. LEDGER conserve les décisions durables ; HISTORY retrace les opérations significatives. Une conversation seule ne conserve pas les règles indispensables.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>Le dossier du premier lot sera <code>Specs/001-create-list/</code>. Sa convergence peut être absente au départ ; elle doit exister pour la fermeture.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-2">Lis la spécification exécutable SAW 3.2 fournie. Prépare les six documents globaux requis et le protocole de lecture, à partir du cadre produit approuvé. Préserve les fichiers existants et signale les incohérences. Référence directement la copie locale de la méthode, sa version et sa révision dans README.md. N’invente aucune décision ou validation humaine et ne lance aucun lot.</code></pre><button type="button" data-copy="prompt-2">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Les six fichiers globaux et la référence exécutable sont présents. README permet de retrouver les règles sans mémoire de conversation.</p></div>
+        </section>
+        <section id="planning" aria-labelledby="planning-title">
+          <p class="step-label">Étape 4 · Assistance du LLM optionnelle</p><h2 id="planning-title">Découper le travail en lots</h2>
+          <p>Un lot porte un objectif cohérent, un résultat identifiable et des conditions de validation. Son identifiant, par exemple <code>LOT-001</code>, est unique et ne sera jamais réutilisé.</p>
+          <ol><li>Listez les résultats successifs qui feront progresser le produit.</li><li>Définissez l’objectif, le périmètre, les exclusions et les dépendances de chaque lot.</li><li>Vérifiez que chaque résultat pourra être évalué clairement.</li><li>Améliorez le découpage avant de préparer les lots reconnus. Tous les détails n’ont pas besoin d’être inventés immédiatement.</li></ol>
+          <div class="note"><h3>Préparer le découpage avec ou sans LLM</h3><p>Fournissez les spécifications du produit et la méthode au LLM. Dans de nombreux cas, vous pouvez lui demander de proposer tout le découpage et de préparer les fichiers en brouillon. Examinez ses hypothèses, ajustez périmètres, dépendances, exigences et gates, puis validez une base de départ avant le premier lancement.</p><p>Cette préparation se situe en amont du cycle formel des lots, tout en faisant partie du parcours pratique. Les humains peuvent aussi décider entièrement du découpage et préparer tous les fichiers eux-mêmes. Le découpage validé reste évolutif selon les règles de SAW.</p></div>
+          <div class="example"><h3>Exemple suivi</h3><p><strong>LOT-001 :</strong> créer et afficher les tâches. <strong>LOT-002 :</strong> terminer une tâche, dépend de LOT-001. <strong>LOT-003 :</strong> conserver les tâches entre sessions, dépend des deux premiers. Ce découpage est un exemple à adapter.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-3">Voici les spécifications du produit et la méthode SAW 3.2. Propose un découpage complet en lots : objectifs, périmètres, dépendances et validations envisagées. Si plusieurs projets sont utiles, propose leur regroupement dans une Application. Tu peux préparer les fichiers en brouillon ; signale les hypothèses et attends ma revue avant de retenir le découpage comme base approuvée. Ne démarre aucun lot.</code></pre><button type="button" data-copy="prompt-3">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Le périmètre est couvert, les dépendances sont visibles et les lots permettent de préparer exigences et gates.</p></div>
+        </section>
+        <section id="lot" aria-labelledby="lot-title">
+          <p class="step-label">Étape 5</p><h2 id="lot-title">Préparer le premier lot</h2>
+          <p>Créez <code>SPEC-001.md</code>, <code>FINDINGS-001.md</code> et <code>GATES-001.md</code>. Chaque fichier de lot commence par un renvoi au README racine.</p>
+          <ol><li>Dans SPEC, décrivez objectif et exigences identifiées, par exemple <code>REQ-001-001</code>. Ajoutez cas importants et dépendances.</li><li>Préparez FINDINGS pour les connaissances qui apparaîtront ; n’inventez aucune découverte.</li><li>Définissez les gates et leur condition de réussite <strong>avant Planned</strong>. Pour AUTO, définissez aussi la méthode déterministe de contrôle.</li><li>Avec un identifiant attribué, une spec suffisamment définie et des gates définies, inscrivez le lot <code>Planned</code> dans STATUS et l’opération significative dans HISTORY.</li></ol>
+          <p>Avant cela, les fichiers restent un brouillon <code>Draft</code>. Le lot n’occupe pas encore le créneau actif.</p>
+          <div class="table-wrap"><table><thead><tr><th>Type</th><th>Évaluation</th><th>Exemple</th></tr></thead><tbody>
+            <tr><td>AUTO</td><td>Contrôle déterministe, même lancé par un LLM.</td><td>Tests de création et de rejet d’un titre vide.</td></tr>
+            <tr><td>LLM</td><td>Analyse sémantique justifiée et documentée.</td><td>Respect des exigences et règles applicables.</td></tr>
+            <tr><td>HUMAN</td><td>Personne nommée, avec horodatage.</td><td>Acceptation du parcours d’usage.</td></tr>
+          </tbody></table></div>
+          <p>Une validation métier est HUMAN, sauf décision humaine démontrant l’absence d’impact métier. Verdicts : <code>TO TEST</code>, <code>PASS</code>, <code>FAIL</code> et <code>N/A</code>. N/A exige une décision humaine au ledger, avec raison et conditions de non-applicabilité.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>REQ-001-001 : un titre non vide crée une tâche visible. REQ-001-002 : un titre vide ou composé d’espaces ne crée aucune tâche et produit une explication claire.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-4">Prépare LOT-001 selon le découpage approuvé : SPEC, FINDINGS et GATES. Définis exigences, cas importants et conditions de validation avant de proposer Planned. Garde les gates à TO TEST. Fais préciser les décisions ou informations manquantes ; ne démarre pas le lot.</code></pre><button type="button" data-copy="prompt-4">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Les exigences décrivent le résultat et les gates permettent de l’évaluer. Aucun PASS n’est anticipé.</p></div>
+        </section>
+        <section id="run" aria-labelledby="run-title">
+          <p class="step-label">Étape 6</p><h2 id="run-title">Autoriser le démarrage et réaliser le lot</h2>
+          <p>L’humain décide le démarrage. Le LLM vérifie les dépendances et le créneau actif. Si le choix entre plusieurs lots possibles est ambigu, il le fait trancher.</p>
+          <h3>Lire avant toute intervention sur un lot</h3>
+          <pre><code>README → PROJECT → RULES → décisions actives de LEDGER
+→ décisions obsolètes explicitement référencées → STATUS
+→ SPEC → FINDINGS → GATES → CONVERGENCE si présente</code></pre>
+          <p>Consultez HISTORY lorsque la chronologie aide la reprise ou la réconciliation. Résolvez les incohérences touchant l’intention, les validations ou l’état avant de travailler.</p>
+          <ol><li>Après autorisation et vérifications, passez à <code>In-progress</code>.</li><li>Réalisez les exigences actives et consignez les nouvelles connaissances dans FINDINGS.</li><li>Tenez à jour les informations de reprise : résultat disponible, travail restant, blocages et prochaine action.</li><li>Consignez les opérations documentaires significatives dans HISTORY.</li></ol>
+          <p>Un seul lot parmi In-progress, Blocked et Ready-to-close occupe le créneau d’un projet. Après démarrage, changer le sens d’une exigence ou d’une gate demande une décision humaine au ledger et la conservation du contenu remplacé.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>Le LLM réalise l’ajout de tâches et le contrôle du titre. S’il découvre une ambiguïté, il la consigne au lieu de modifier silencieusement le besoin.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-5">Lis README.md et suis le bootstrap obligatoire. Je t’autorise à démarrer LOT-001 si les dépendances sont satisfaites et le créneau disponible. Réalise les exigences actives et tiens à jour les documents et informations de reprise. Demande les décisions humaines réservées par SAW ; ne démarre aucun autre lot et ne ferme pas celui-ci sans mon acceptation.</code></pre><button type="button" data-copy="prompt-5">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Le lot est autorisé, le contexte a été lu et le créneau est disponible. Découvertes et décisions sont dans leurs fichiers respectifs.</p></div>
+        </section>
+        <section id="validate" aria-labelledby="validate-title">
+          <p class="step-label">Étape 7</p><h2 id="validate-title">Évaluer les gates sur le résultat</h2>
+          <p>Identifiez le résultat examiné : livraison nommée, version de document, copie conservée ou révision de gestionnaire de versions. Un chemin vers un contenu qui change ne suffit pas, seul, à distinguer deux résultats. Git n’est pas imposé.</p>
+          <ol><li><strong>AUTO :</strong> conservez date, résultat évalué, verdict, résultat du contrôle et preuves.</li><li><strong>LLM :</strong> conservez date, résultat évalué, évaluateur et justification concise ; identifiez le modèle lorsqu’il est disponible.</li><li><strong>HUMAN :</strong> faites réellement examiner le résultat par la personne. PASS exige son nom et un horodatage ; le LLM ne peut pas l’accorder.</li><li>Après un échec, corrigez et réévaluez. Avant toute nouvelle évaluation ou remise à zéro, préservez l’ancien verdict et ses détails dans <code>Test history</code>.</li></ol>
+          <div class="note"><h3>Une correction peut invalider un PASS</h3><p>Documentez l’examen d’impact après une modification susceptible d’affecter une validation. Remettez les gates affectées à TO TEST après conservation des résultats antérieurs. Si l’impact est indéterminable, réévaluez toutes les gates actives sauf les N/A encore applicables. Justifiez les PASS maintenus après examen. Une validation HUMAN affectée doit être refaite par un humain.</p></div>
+          <div class="example"><h3>Exemple suivi</h3><p>La livraison task-list-review-01 est évaluée par les trois gates. Corriger le message de titre vide impose d’examiner l’impact sur les tests et le parcours déjà validés.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-6">Évalue les gates AUTO et LLM de LOT-001 sur un résultat identifié. Préserve les évaluations précédentes et documente preuves et justifications. Présente-moi les contrôles HUMAN sans leur attribuer de PASS. Signale échecs et validations devenues invalides.</code></pre><button type="button" data-copy="prompt-6">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Chaque gate active applicable a un PASS valable ou un N/A autorisé encore applicable. FAIL et TO TEST empêchent la fermeture.</p></div>
+        </section>
+        <section id="close" aria-labelledby="close-title">
+          <p class="step-label">Étape 8</p><h2 id="close-title">Préparer, accepter et fermer le lot</h2>
+          <p>La fermeture compare l’intention et le résultat réel. Des tests réussis ne suffisent pas.</p>
+          <ol><li>Vérifiez la validité des gates actives et les conditions des N/A. Refusez la fermeture si une gate reste FAIL ou TO TEST.</li><li>Examinez chaque exigence active : satisfaction ou écart précis à faire accepter. Vérifiez remplacements et obsolètes pertinents.</li><li>Traitez chaque finding : résolution locale expliquée, promotion, report dans un lot au moins Planned ou rejet motivé. Aucun OPEN ne doit rester à la fermeture.</li><li>Préparez CONVERGENCE : résultat identifié, écarts, gates essentielles, traitement des findings et travail résiduel.</li><li>Obtenez et consignez les décisions humaines requises, appliquez leurs conséquences et réexaminez les validations affectées.</li><li>Vérifiez l’absence de cause de refus et passez à Ready-to-close si nécessaire.</li><li>Présentez résultat et convergence à l’humain pour acceptation explicite.</li><li>Finalisez convergence et mises à jour approuvées, contrôlez leur cohérence, puis inscrivez Closed dans STATUS <strong>en dernier parmi les documents de contenu et d’état</strong>. Consignez ensuite l’opération dans HISTORY.</li></ol>
+          <p><code>TOTAL</code> signifie que toutes les exigences actives sont satisfaites. <code>PARTIAL</code> signifie qu’au moins un écart a été accepté par décision humaine au ledger. Un écart accepté ne neutralise jamais une gate FAIL ou TO TEST. Une fermeture totale ordinaire n’exige pas d’entrée au ledger ; l’acceptation humaine reste obligatoire.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>L’humain examine la liste livrée, les validations et le traitement des findings. Son acceptation porte sur ce résultat identifié et les écarts réellement présentés.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-7">Je te demande de préparer la fermeture de LOT-001 selon SAW. Vérifie gates, exigences, findings, décisions et cohérence documentaire. Prépare la convergence et présente le résultat identifié, les écarts et les décisions nécessaires. Attends mon acceptation avant de finaliser la fermeture et de passer STATUS à Closed.</code></pre><button type="button" data-copy="prompt-7">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Toutes les exigences sont examinées, les findings traités, les gates valables et les décisions présentes. La convergence rapporte une acceptation réelle.</p></div>
+        </section>
+        <section id="resume" aria-labelledby="resume-title">
+          <p class="step-label">Étape 9</p><h2 id="resume-title">Reprendre sans dépendre de la conversation</h2>
+          <p>Avant une interruption ou une transmission, préparez les documents pour la reprise :</p>
+          <ul><li>Le résultat disponible et son emplacement, ou son absence.</li><li>Le travail restant connu.</li><li>Les blocages et leurs conditions de levée.</li><li>La prochaine action ou décision attendue.</li></ul>
+          <p>STATUS donne un résumé courant ou des références : causes dans FINDINGS, validations dans GATES, intention dans SPEC. Une transmission autonome inclut la spécification exécutable et les documents du bootstrap.</p>
+          <p>Si une opération documentaire a été interrompue, comparez les fichiers à la décision enregistrée. Achevez les écritures manquantes si elle règle clairement la suite, sans redemander une acceptation déjà documentée. Si une décision nécessaire manque ou reste ambiguë, demandez une clarification avant le travail dépendant. Préservez les traces et consignez la réconciliation dans HISTORY.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>Une nouvelle conversation doit retrouver que LOT-001 est In-progress, où se trouve sa réalisation et quelles gates restent à tester, sans relire l’ancien chat.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-8">Lis README.md et reconstruis le contexte selon le bootstrap. Compare STATUS et les fichiers du lot, consulte les informations de reprise et HISTORY si utile. Signale les incohérences et réconcilie les écritures interrompues selon les décisions enregistrées. Reprends le travail autorisé ; demande seulement les décisions nécessaires encore absentes ou ambiguës.</code></pre><button type="button" data-copy="prompt-8">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Les fichiers suffisent à déterminer l’état, le résultat et la prochaine action. Aucun fait historique n’est inventé.</p></div>
+        </section>
+        <section id="next" aria-labelledby="next-title">
+          <p class="step-label">Étape 10</p><h2 id="next-title">Passer au lot suivant</h2>
+          <p>Après fermeture, répétez le cycle pour le prochain lot planifié. Vérifiez ses dépendances, actualisez sa préparation avec les connaissances acquises et faites autoriser le démarrage.</p>
+          <pre><code>Planned → In-progress → Ready-to-close → Closed</code></pre>
+          <p>Les lots décidés depuis les findings doivent être préparés et référencés. Une évolution du périmètre ne doit pas effacer les documents précédents ; les identifiants retirés ne sont pas réutilisés.</p>
+          <div class="example"><h3>Exemple suivi</h3><p>LOT-001 fermé, l’humain peut autoriser LOT-002 pour terminer les tâches. LOT-003 conservera ensuite titres et états entre sessions.</p></div>
+          <div class="prompt"><h3>À demander au LLM</h3><pre><code id="prompt-9">Lis README.md et propose le prochain lot Planned dont les dépendances sont satisfaites. Explique tout choix ambigu et les ajustements de préparation nécessaires. Attends mon choix et mon autorisation avant le démarrage.</code></pre><button type="button" data-copy="prompt-9">Copier la consigne</button><span class="copy-feedback" role="status" aria-live="polite"></span></div>
+          <div class="check"><h3>Avant de continuer</h3><p>Le lot précédent est fermé, le créneau libre et les dépendances satisfaites. Le démarrage du suivant est autorisé par l’humain.</p></div>
+        </section>
+        <section id="special" aria-labelledby="special-title">
+          <h2 id="special-title">Quand le parcours change</h2>
+          <details><summary>Donner un traitement final à un finding</summary><p>Une découverte commence généralement à OPEN. Pour la traiter, utilisez RESOLVED LOCALLY (résolution locale expliquée), PROMOTED TO LEDGER (décision durable), PROMOTED TO RULE (règle approuvée), DEFERRED TO LOT (travail confié à un autre lot) ou DISCARDED (rejet motivé). Indiquez les destinations et leurs références réelles. Plusieurs traitements terminaux peuvent se combiner pour plusieurs destinations ; OPEN ne se combine pas avec eux, et DISCARDED ne se combine pas avec une promotion. Créer un lot depuis un finding exige une décision humaine ; le lot destinataire doit être au moins Planned à la fermeture du lot source.</p></details>
+          <details><summary>Le lot est bloqué</summary><p>Consignez cause, conditions de levée et prochaine action, puis passez à Blocked. Le créneau reste occupé : aucun autre lot du même projet ne démarre. Revenez à In-progress quand les conditions sont satisfaites et les décisions nécessaires obtenues.</p></details>
+          <details><summary>Le besoin ou une règle change</summary><p>Après démarrage, un changement de sens de SPEC ou GATES exige une décision humaine au ledger. Une évolution de RULES après initialisation en exige aussi une, avec portée et conséquences pour les lots concernés. Préservez les textes remplacés comme obsolètes, reliez les remplacements et examinez les gates affectées. Une nouvelle règle ne rouvre pas automatiquement un lot fermé.</p></details>
+          <details><summary>Un sous-lot devient utile</summary><p>Un sous-lot isole un objectif avec ses fichiers, par exemple LOT-001-001 dans Specs/001-create-list/001-001-input-validation/. Le parent reste LOT-001. L’humain autorise le démarrage ; le parent passe d’abord de In-progress à Stand-by, puis le sous-lot devient seul In-progress. Après fermeture, annulation ou remplacement du sous-lot, le retour au parent est décidé par l’humain après examen de l’impact sur son travail et ses validations.</p></details>
+          <details><summary>Arrêter ou remplacer un lot</summary><p>Cancelled : arrêt avant fermeture sans remplacement. Obsolete : lot remplacé. Abandoned : résultat précédemment fermé, puis écarté sans remplacement. Ces décisions sont humaines et consignées au ledger. Préservez fichiers, références et convergences existantes. Annuler ou remplacer ne doit pas contourner une gate ni simuler une fermeture.</p></details>
+          <details><summary>Modifier un lot déjà fermé</summary><p>La reprise exige une décision humaine préalable au ledger et un créneau disponible. Conservez l’ancienne convergence dans Historical convergences, les évaluations dans Test history ; remettez toutes les gates actives applicables à TO TEST et réexaminez les N/A. Enregistrez ensuite In-progress avant de modifier. Revalidez et obtenez une nouvelle fermeture humaine. Pour Obsolete, résolvez aussi le sort du remplaçant.</p></details>
+        </section>
+        <section id="application" aria-labelledby="application-title">
+          <p class="step-label">Utilisation avancée</p><h2 id="application-title">Organiser une Application avec plusieurs projets</h2>
+          <p>Pour un ensemble plus important, une <strong>Application</strong> regroupe plusieurs projets SAW. Elle porte la coordination et les règles communes au-dessus des projets ; elle ne possède pas de lots.</p>
+          <p>À partir des spécifications et de la méthode, vous pouvez demander au LLM de proposer cette organisation, puis faire revoir responsabilités, dépendances et découpage par les humains.</p>
+          <pre><code>task-application/
+  README.md  PROJECT.md  RULES.md  LEDGER.md  STATUS.md
+  user-interface/  ← projet SAW et ses lots
+  task-service/    ← projet SAW et ses lots
+  integration/     ← projet SAW pour le résultat transversal</code></pre>
+          <ol><li>Définissez le périmètre de l’Application et inventoriez exhaustivement les projets, leur racine documentaire et leurs responsabilités.</li><li>Créez son README, PROJECT, RULES, LEDGER et STATUS. Son README référence directement la méthode exécutable applicable. Chaque projet conserve ses six fichiers globaux et sa référence locale.</li><li>Chaque projet fait lire le README de l’Application puis son README local. Son RULES demande d’appliquer les règles globales sans les recopier. Ses SPEC renvoient aux deux README.</li><li>Découpez chaque projet en lots et définissez les dépendances entre projets. Nommez les projets dans les références interprojets : les identifiants sont uniques localement.</li><li>Pour avancer en parallèle, obtenez <strong>avant l’exécution</strong> une décision d’une autorité architecturale identifiée dans le LEDGER de l’Application.</li></ol>
+          <div class="note"><h3>Le contrat de parallélisme</h3><p>Il définit pour chaque projet : périmètre et responsabilités, dépendances et interfaces, ressources ou fichiers partagés, propriétaire de chaque zone modifiable, justification de l’indépendance, coordination et résolution des conflits. Si des écritures partagées sont nécessaires, définissez leur mécanisme de coordination avant les travaux.</p></div>
+          <p>Chaque projet garde un seul lot actif. Le blocage d’un projet ne bloque pas automatiquement les autres : examinez leurs dépendances. Le STATUS d’Application est une vue de coordination datée ou indiquant son origine ; le STATUS de chaque projet reste l’autorité pour ses lots.</p>
+          <div class="example"><h3>Exemple</h3><p>Un projet réalise l’interface, un autre le service de tâches. Leurs interfaces et zones de modification sont définies avant la progression simultanée. Le projet d’intégration possède ses lots, gates et convergences pour accepter le parcours complet. La validation transversale est gouvernée par ce projet, pas par un lot d’Application.</p></div>
+        </section>
+        <section id="reference" aria-labelledby="reference-title">
+          <h2 id="reference-title">Aide-mémoire, consignes et modèles</h2>
+          <h3>Checklist du cycle</h3>
+          <ul><li>Cadre produit, règles et référence exécutable explicites.</li><li>Six documents globaux présents, dont HISTORY.</li><li>SPEC, FINDINGS et GATES préparés ; gates définies avant Planned.</li><li>Démarrage autorisé ; un seul lot dans le créneau actif.</li><li>Découvertes, décisions et informations de reprise conservées.</li><li>PASS valables ou N/A humains encore applicables.</li><li>Chaque exigence et chaque finding examinés et traités.</li><li>Résultat identifié et écarts présentés acceptés par l’humain.</li><li>Convergence et mises à jour finalisées avant Closed dans STATUS.</li></ul>
+          <h3>Quelle information va dans quel fichier ?</h3>
+          <div class="table-wrap"><table><thead><tr><th>Fichier</th><th>Question traitée</th></tr></thead><tbody>
+            <tr><td>README</td><td>Comment travailler et où lire les règles ?</td></tr><tr><td>PROJECT</td><td>Quel produit, pour qui et dans quel périmètre ?</td></tr><tr><td>RULES</td><td>Quelles contraintes actives ?</td></tr><tr><td>STATUS</td><td>Quel état courant et quelle prochaine action ?</td></tr><tr><td>LEDGER</td><td>Quelles décisions durables, par qui et pourquoi ?</td></tr><tr><td>HISTORY</td><td>Quelles opérations documentaires significatives ?</td></tr><tr><td>SPEC</td><td>Quel résultat le lot doit-il produire ?</td></tr><tr><td>FINDINGS</td><td>Quelles connaissances acquises et quel traitement ?</td></tr><tr><td>GATES</td><td>Quelles validations, sur quel résultat ?</td></tr><tr><td>CONVERGENCE</td><td>Quel résultat accepté et quels écarts ?</td></tr>
+          </tbody></table></div>
+          <h3>Modèles à copier et à adapter</h3>
+          <p>Les modèles utilisent des titres anglais comme les fichiers normatifs. Adaptez leur contenu au projet et à ses conventions. Remplacez les champs entre chevrons par des informations réelles et retirez les indications pédagogiques. Ces exemples ne constituent pas une validation.</p>
+          <div class="note"><p>Le modèle STATUS suppose une SPEC et des GATES complètes : ne le copiez comme Planned qu’après cette préparation. La méthode exacte d’une gate AUTO doit être définie avant Planned. La convergence se remplit avec les constats et décisions réellement obtenus.</p></div>
+                    <details class="template"><summary>README.md</summary><pre><code id="template-0"># S.A.W. project protocol
+## Purpose of this file
+Universal entry point for this project.
+## Protocol reference
+This project follows S.A.W. 3.2, revision 3.2.0-2026-09-27:
+[local executable specification](SAW-3.2-SPECIFICATION-EXEC.md).
+HISTORY.md is required and uses dated, append-only entries.
+## Mandatory bootstrap
+Read README, PROJECT, RULES, all active LEDGER decisions, explicitly
+referenced obsolete decisions, STATUS, then SPEC, FINDINGS, GATES,
+and CONVERGENCE if present, in that order.
+Consult HISTORY when chronology helps resumption or reconciliation.
+## Starting a lot
+Check dependencies and the active slot. Obtain human authorization.
+Resolve ambiguous choices with the human. Update STATUS and HISTORY.
+## Working on a lot
+Implement active requirements. Record knowledge in FINDINGS.
+Keep resumption information current. Follow the executable specification.
+## Validating a lot
+Evaluate active gates on an identifiable result. Preserve previous evaluations.
+Only a named human can grant HUMAN PASS, with a timestamp.
+## Closing a lot
+Follow the executable specification's closure procedure. Review every
+requirement and finding, prepare convergence, obtain human acceptance,
+finalize approved documents, then record Closed in STATUS last among
+content/state documents. Record the operation in HISTORY afterward.
+## Mutation rules
+Preserve obsolete content and replacement references. Never reuse identifiers.
+Meaning changes after starting require a human LEDGER decision.
+Review affected validations after relevant changes.
+## Human-only decisions
+Significant product changes; rule evolution; meaning changes after starting;
+HUMAN verdicts; N/A; accepted differences; lots created from findings;
+closure; cancellation; replacement; abandonment; reopening; reactivation.</code></pre><button type="button" data-copy="template-0">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>PROJECT.md</summary><pre><code id="template-1"># Project
+## Purpose
+Provide a small task list for personal use.
+## Problem
+Users need to retain tasks and see which remain unfinished.
+## Users and actors
+One user; a human project owner accepting the result.
+## Scope
+Create, list and complete tasks; retain tasks between sessions.
+## Out of scope
+Accounts, sharing, cloud synchronization and notifications.
+## Stable functional characteristics
+A task has a title and a completion state.
+## Glossary
+Task: an item of work entered by the user.</code></pre><button type="button" data-copy="template-1">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>RULES.md</summary><pre><code id="template-2">## R-001 — Local storage
+Status: ACTIVE
+Source: Initial project rule
+Rule: Keep task data on the user's device; do not send it to a server.
+Replaces: None
+Replaced by: None
+
+## R-002 — Timestamp format
+Status: ACTIVE
+Source: Initial project rule
+Rule: Use YYYY-MM-DDTHH:mm:ss±HH:mm for documentary timestamps.
+Replaces: None
+Replaced by: None</code></pre><button type="button" data-copy="template-2">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>STATUS.md</summary><pre><code id="template-3"># Lot status
+| Lot reference | Parent | Title | Status | Replaced by | Comment |
+|---|---|---|---|---|---|
+| LOT-001 | None | Create and list tasks | Planned | None | Spec and gates defined; awaiting human start. |
+
+## Resumption — LOT-001
+Available result: planning files in Specs/001-create-list/; no implementation.
+Remaining work: implement and validate the lot.
+Blockers: none known.
+Next action: human authorizes starting LOT-001.</code></pre><button type="button" data-copy="template-3">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>LEDGER.md</summary><pre><code id="template-4"># Decision ledger
+
+No durable decision has been recorded yet.
+
+&lt;!-- For a real approved decision, replace this comment with:
+## D-001 — &lt;Decision title&gt;
+Date: &lt;actual timestamp&gt;
+Decided by: &lt;human name&gt;
+Decision: &lt;approved decision&gt;
+Reason: &lt;reason&gt;
+Source: &lt;finding identifier or None&gt;
+Related: &lt;affected identifiers&gt;
+Consequences: &lt;scope and required actions&gt;
+Do not record a proposed decision as approved.
+--&gt;</code></pre><button type="button" data-copy="template-4">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>HISTORY.md</summary><pre><code id="template-5"># Project history
+
+&lt;!-- After actual initialization, append a real entry:
+## &lt;actual timestamp&gt; — Project initialized
+Actor: &lt;person or LLM performing the operation&gt;
+Operation: Created project documents and planned LOT-001.
+Documents: README.md, PROJECT.md, RULES.md, STATUS.md, LEDGER.md,
+HISTORY.md, Specs/001-create-list/
+Outcome: Applied
+Summary: LOT-001 awaits human start; no implementation has started.
+Do not invent historical dates, actors or operations.
+--&gt;</code></pre><button type="button" data-copy="template-5">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>SPEC-001.md</summary><pre><code id="template-6"># LOT-001 — Create and list tasks
+&gt; Before working on this lot, read the repository root README.md.
+## Objective
+Let a user create tasks and see the current list.
+## Context
+First lot of the personal task-list project.
+## In scope
+Title entry, task creation and current-session list display.
+## Out of scope
+Completion state and persistence, assigned to later planned lots.
+## Requirements
+### REQ-001-001 — Create a task
+A non-empty title creates exactly one task visible in the current list.
+### REQ-001-002 — Reject an empty title
+An empty or whitespace-only title creates no task and shows a clear explanation.
+## Important cases
+Empty title; whitespace-only title; successive additions; initially empty list.
+## Dependencies
+None.
+## Known constraints
+Apply every active RULES.md rule.</code></pre><button type="button" data-copy="template-6">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>FINDINGS-001.md</summary><pre><code id="template-7"># Findings — LOT-001
+&gt; Before working on this lot, read the repository root README.md.
+
+No finding has been recorded yet.
+
+&lt;!-- For a real finding, replace this comment with:
+## F-001-001 — &lt;Finding title&gt;
+Status: OPEN
+Found at: &lt;actual timestamp&gt;
+Finding: &lt;observed knowledge&gt;
+Destinations: &lt;identified destination, e.g. Local&gt;
+Evidence: &lt;evidence if useful&gt;
+Impact: &lt;impact if useful&gt;
+Before closure, explain final treatment and assign a consistent terminal status.
+--&gt;</code></pre><button type="button" data-copy="template-7">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>GATES-001.md</summary><pre><code id="template-8"># Gates — LOT-001
+&gt; Before working on this lot, read the repository root README.md.
+
+## G-001-001 — Creation and empty-title tests
+Type: AUTO
+Status: TO TEST
+Defined at: &lt;actual timestamp&gt;
+Condition: Automated tests for REQ-001-001 and REQ-001-002 pass.
+Method: &lt;exact test command and pass criterion, defined before Planned&gt;
+
+## G-001-002 — Requirement and rule consistency
+Type: LLM
+Status: TO TEST
+Defined at: &lt;actual timestamp&gt;
+Condition: Implementation satisfies REQ-001-001 and REQ-001-002
+and applicable active rules without an unexplained discrepancy.
+
+## G-001-003 — User journey acceptance
+Type: HUMAN
+Status: TO TEST
+Defined at: &lt;actual timestamp&gt;
+Condition: The human confirms that adding tasks, reading the list and
+understanding the empty-title explanation meet the intended use.
+
+&lt;!-- Record actual evaluations with these type-specific fields:
+AUTO: Tested at, Evaluated result, Result, Evidence.
+LLM: Evaluated at, Evaluated result, Evaluator, Rationale (model if available).
+HUMAN: Validated at, Validated by, Evaluated result, Comment.
+Preserve previous verdicts and evaluation details in Test history
+before every new evaluation or reset. Do not assume PASS.
+--&gt;</code></pre><button type="button" data-copy="template-8">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <details class="template"><summary>CONVERGENCE-001.md</summary><pre><code id="template-9"># Convergence — LOT-001
+&gt; Before working on this lot, read the repository root README.md.
+Closed at: &lt;complete after actual acceptance&gt;
+Closed by: &lt;human accepting closure&gt;
+Decision: &lt;required ledger decision, or None for ordinary total closure&gt;
+Convergence: &lt;TOTAL or PARTIAL based on the actual result&gt;
+## Result obtained
+&lt;Identify the accepted result and relate it to results evaluated in GATES.&gt;
+## Differences from active requirements
+&lt;For every active requirement, state satisfaction or the precise accepted
+difference and its human ledger decision. Do not assume satisfaction.&gt;
+## Essential gate results
+&lt;Summarize valid PASS verdicts and authorized, still-applicable N/A.&gt;
+## Findings disposition
+&lt;Explain final treatment of each finding and reference its destinations.&gt;
+## Residual work
+&lt;Reference decided/planned future lots or state that none remains.&gt;
+## Closure decision
+&lt;Record actual human acceptance of the identified result and differences.&gt;
+## Historical convergences
+&lt;Preserve previous convergences here when reopening under the method.&gt;</code></pre><button type="button" data-copy="template-9">Copier le modèle</button><span class="copy-feedback" role="status" aria-live="polite"></span></details>
+          <p><strong>Référence :</strong> <a href="SAW-3.2-SPECIFICATION-EXEC.txt">Spécification exécutable 3.2</a> · <a href="SAW-3.2-SPECIFICATION.txt">Spécification normative complète</a>.</p>
+        </section>
+        <section id="faq" aria-labelledby="faq-title">
+          <h2 id="faq-title">Questions fréquentes</h2>
+          <details><summary>1. SAW convient-il à un petit projet ?</summary><p>Oui. Le projet peut couvrir une petite fonctionnalité. Gardez des documents courts et proportionnés, mais respectez toutes les obligations applicables, dont les six fichiers globaux de la version exécutable.</p></details>
+          <details><summary>2. Faut-il obligatoirement utiliser une IA ?</summary><p>Non. Les humains peuvent appliquer SAW avec les fichiers Markdown seuls. Un LLM peut réaliser le produit et gérer les documents ; il doit respecter les décisions réservées à l’humain.</p></details>
+          <details><summary>3. Faut-il un outil, un IDE ou Git particulier ?</summary><p>Non. Aucun outil propre à SAW, IDE, gestionnaire de versions ou fournisseur de LLM n’est imposé. Choisissez les outils utiles. Une gate AUTO peut utiliser une commande de test ou de build.</p></details>
+          <details><summary>4. Peut-on appliquer SAW à un logiciel existant ?</summary><p>Oui. Définissez le périmètre, documentez les contraintes et l’existant utiles à sa compréhension, puis préparez les lots d’évolution. Ne prétendez pas que les travaux antérieurs ont suivi SAW si leurs traces ne l’établissent pas.</p></details>
+          <details><summary>5. Peut-on demander au LLM de préparer tout le découpage ?</summary><p>Oui, dans de nombreux cas. Fournissez spécifications du produit et méthode, demandez une proposition de projets et de lots avec dépendances, puis revoyez hypothèses et documents avant de lancer l’exécution. Cette assistance est optionnelle.</p></details>
+          <details><summary>6. Peut-on préparer tous les fichiers sans LLM ?</summary><p>Oui. Les humains peuvent décider du découpage, écrire les documents globaux et préparer SPEC, FINDINGS et GATES. Ils peuvent ensuite travailler manuellement ou déléguer l’exécution à un LLM.</p></details>
+          <details><summary>7. Comment choisir la taille d’un lot ?</summary><p>Choisissez un objectif cohérent, un résultat identifiable et des conditions de validation claires. Découpez si le périmètre mélange des objectifs indépendants ou devient difficile à examiner. SAW ne fixe pas de durée ni de nombre de fichiers par lot.</p></details>
+          <details><summary>8. Quelle différence entre Application, projet et lot ?</summary><p>L’Application coordonne plusieurs projets et ne possède pas de lots. Le projet est une unité de pilotage documentaire avec ses fichiers et son état. Le lot porte un objectif de réalisation à l’intérieur d’un projet.</p></details>
+          <details><summary>9. Peut-on travailler sur plusieurs lots en parallèle ?</summary><p>Un seul lot occupe le créneau actif d’un projet. Plusieurs projets d’une Application peuvent progresser simultanément avec un contrat de parallélisme approuvé définissant responsabilités, interfaces et ressources partagées.</p></details>
+          <details><summary>10. Quelle différence entre SPEC, FINDINGS et LEDGER ?</summary><p>SPEC décrit l’intention du lot. FINDINGS conserve les connaissances acquises. LEDGER consigne les décisions durables et leurs raisons. Une découverte ne modifie pas automatiquement une exigence ou une règle.</p></details>
+          <details><summary>11. Qui choisit les gates et quand ?</summary><p>Elles se préparent avec le lot, à la main ou avec un LLM, avant Planned. Elles décrivent les conditions de fermeture. Une validation métier est HUMAN, sauf décision humaine démontrant l’absence d’impact métier. Après démarrage, un changement de sens demande une décision au ledger.</p></details>
+          <details><summary>12. Le LLM peut-il valider une gate HUMAN ou fermer seul un lot ?</summary><p>Non. PASS HUMAN exige un nom et un horodatage humains. Le LLM peut préparer contrôles et convergence, puis finaliser les documents après l’acceptation humaine réelle.</p></details>
+          <details><summary>13. Que faire si une gate échoue ou si le résultat change après validation ?</summary><p>Corrigez, préservez les évaluations précédentes et réévaluez. Après un changement, consignez l’examen d’impact et remettez les gates affectées à TO TEST. Si elles deviennent FAIL ou TO TEST pendant Ready-to-close, revenez à In-progress avant de poursuivre.</p></details>
+          <details><summary>14. Que faire si le besoin change ou si le lot est bloqué ?</summary><p>Faites décider les changements d’intention, consignez-les et examinez leurs effets. Pour un blocage, documentez cause et conditions de levée, puis inscrivez Blocked. Aucun autre lot du même projet ne démarre pendant le blocage.</p></details>
+          <details><summary>15. Comment reprendre après une interruption ou avec un autre LLM ?</summary><p>Repartez du README et suivez le bootstrap. Les fichiers décrivent résultat disponible, travail restant, blocages et prochaine action. Incluez la spécification exécutable dans une transmission autonome et réconciliez les écritures interrompues sans inventer de faits.</p></details>
+          <p><a href="#contents">Retour au sommaire</a></p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="wrap"><p>Guide pratique de S.A.W. 3.2 · Révision de référence 3.2.0-2026-09-27. La spécification exécutable prévaut pour l’exécution.</p><a href="SAW-3.2-PRESENTATION.html">Présentation de SAW</a></footer>
+  <script>
+document.querySelectorAll('[data-copy]').forEach((button) => {
+  button.addEventListener('click', async () => {
+    const target = document.getElementById(button.dataset.copy);
+    const feedback = button.parentElement.querySelector('[role="status"]');
+    const french = document.documentElement.lang === 'fr';
+    try {
+      if (!navigator.clipboard || !window.isSecureContext) throw new Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(target.textContent);
+      feedback.textContent = french ? 'Texte copié.' : 'Text copied.';
+    } catch {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(target);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      feedback.textContent = french ? 'Copie automatique indisponible : le texte est sélectionné pour une copie manuelle.' : 'Automatic copy unavailable: text is selected for manual copying.';
+    }
+  });
+});
+let printDetails = [];
+window.addEventListener('beforeprint', () => {
+  printDetails = [...document.querySelectorAll('details')].map((element) => [element, element.open]);
+  printDetails.forEach(([element]) => { element.open = true; });
+});
+window.addEventListener('afterprint', () => {
+  printDetails.forEach(([element, open]) => { element.open = open; });
+});
+  </script>
+</body>
+</html>

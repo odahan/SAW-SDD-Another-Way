@@ -116,6 +116,13 @@
       .process li::before { left: -2.6rem; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    .manual-cta { margin-block: 1.5rem; }
+    .manual-button, .contact-button { display: inline-block; border: 1px solid var(--cyan); border-radius: 10px; padding: .75rem 1rem; background: #173543; color: var(--text); font: inherit; font-weight: 750; cursor: pointer; text-decoration: none; }
+    .manual-button { background: var(--cyan); color: #080d14; }
+    .manual-button:hover { background: #bbf9fa; color: #080d14; }
+    .contact-button:hover { background: #234b5b; }
+    .contact-button:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    .contact-status { display: block; min-height: 1.6em; margin-top: .7rem; color: var(--green); overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
@@ -128,6 +135,8 @@
       <a href="#vision">L'idée</a>
       <a href="#cycle">Le cycle</a>
       <a href="#lot">Un lot en pratique</a>
+      <a href="SAW-3.2-MANUAL.html">Guide pratique</a>
+      <a href="#contact">Contact</a>
       <a class="language-link" href="../SAW-EN/SAW-3.2-PRESENTATION.html" hreflang="en" lang="en">EN Version</a>
     </nav>
   </header>
@@ -138,6 +147,7 @@
         <p class="eyebrow">Spec-Driven Development · AI centric</p>
         <h1>SDD, d'une autre façon</h1>
         <p class="lead"><strong class="wordmark">S.A.W. (SDD Another Way)</strong> 3.2 organise le développement autour d'une intention écrite, de lots successifs et de validations explicites. Le LLM peut mener le travail et tenir les documents ; l'humain garde les décisions qui lui appartiennent.</p>
+        <div class="manual-cta"><a class="manual-button" href="SAW-3.2-MANUAL.html">Guide pratique — démarrer avec SAW</a></div>
         <p class="support">La méthode s'inscrit dans le <em>Spec-Driven Development</em> (SDD) : partir d'une spécification partagée pour relier besoins, réalisation et validation. Elle est issue de Pro-Spec 3, méthode créée et affinée au fil de dizaines de réalisations avec l'IA.</p>
         <p class="support">Un <strong>projet</strong> peut couvrir une application entière, une fonctionnalité importante ou même un contrôle visuel complexe. Plusieurs projets peuvent appartenir à une <strong>Application</strong> placée au-dessus d'eux, avec ses règles générales et ses documents de coordination. Ils peuvent avancer en parallèle si une décision architecturale explicite définit leur indépendance et la gestion de leurs ressources partagées ; chaque projet garde un seul lot actif à la fois.</p>
         <div class="pill-row" aria-label="Caractéristiques">
@@ -253,11 +263,32 @@
         <p><strong>Spécification complète :</strong> <a href="SAW-3.2-SPECIFICATION.txt">Lire la spécification normative de S.A.W. (SDD Another Way) 3.2</a>.</p>
       </div>
     </section>
+    <section id="contact" class="wrap" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contacter l’auteur</h2>
+      <p>Une question sur SAW ou un retour sur la méthode ? Contactez Olivier Dahan par e-mail.</p>
+      <button id="copy-contact" class="contact-button" type="button">Copier l’adresse e-mail</button>
+      <span id="contact-status" class="contact-status" role="status" aria-live="polite"></span>
+      <noscript><p>Pour contacter l’auteur : odahan [arobase] e-naxos [point] com.</p></noscript>
+    </section>
   </main>
 
   <footer class="wrap">
     <p>S.A.W. (SDD Another Way) 3.2</p>
     <p>Présentation synthétique · la spécification normative prévaut pour l'exécution.</p>
   </footer>
+  <script>
+document.getElementById('copy-contact').addEventListener('click', async () => {
+  const address = ['odahan', ['e-naxos', 'com'].join('.')].join('@');
+  const status = document.getElementById('contact-status');
+  const french = document.documentElement.lang === 'fr';
+  try {
+    if (!navigator.clipboard || !window.isSecureContext) throw new Error('Clipboard unavailable');
+    await navigator.clipboard.writeText(address);
+    status.textContent = french ? 'Adresse e-mail copiée.' : 'Email address copied.';
+  } catch {
+    status.textContent = (french ? 'Copiez cette adresse : ' : 'Copy this address: ') + address;
+  }
+});
+  </script>
 </body>
 </html>
