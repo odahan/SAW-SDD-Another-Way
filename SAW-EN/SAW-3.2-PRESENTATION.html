@@ -116,7 +116,7 @@
       .process li::before { left: -2.6rem; }
     }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-    .manual-cta { margin-block: 1.5rem; }
+    .manual-cta { display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; margin-block: 1.5rem; }
     .manual-button, .contact-button { display: inline-block; border: 1px solid var(--cyan); border-radius: 10px; padding: .75rem 1rem; background: #173543; color: var(--text); font: inherit; font-weight: 750; cursor: pointer; text-decoration: none; }
     .manual-button { background: var(--cyan); color: #080d14; }
     .manual-button:hover { background: #bbf9fa; color: #080d14; }
@@ -147,7 +147,10 @@
         <p class="eyebrow">Spec-Driven Development · AI-centric</p>
         <h1>SDD, another way</h1>
         <p class="lead"><strong class="wordmark">S.A.W. (SDD Another Way)</strong> 3.2 organizes development around documented intent, one lot of work after another, and explicit validation. An LLM can do the work and keep the documents up to date; people make the decisions reserved for them.</p>
-        <div class="manual-cta"><a class="manual-button" href="SAW-3.2-MANUAL.html">Practical guide — get started with SAW</a></div>
+        <div class="manual-cta">
+          <a class="manual-button" href="SAW-3.2-MANUAL.html">Practical guide — get started with SAW</a>
+          <a class="manual-button" href="https://www.e-naxos.com/saw-course/#en">Complete introduction to SAW</a>
+        </div>
         <p class="support">The method is rooted in <em>Spec-Driven Development</em> (SDD): starting from a shared specification to connect requirements, implementation, and validation. It stems from Pro-Spec 3, a method created and refined over dozens of implementations with AI.</p>
         <p class="support">A <strong>project</strong> can cover an entire application, a major feature, or even a complex visual control. Multiple projects can belong to an <strong>Application</strong> placed above them, with its general rules and coordination documents. They can advance in parallel if an explicit architectural decision defines their independence and the management of their shared resources; each project maintains only one active lot at a time.</p>
         <div class="pill-row" aria-label="Features">
